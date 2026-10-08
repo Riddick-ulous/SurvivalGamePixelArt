@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "operations": [
+    {
+      "id": "assist",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "check_rights",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "cleanup",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "execute_recipe",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "gather",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "harvest",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "inspect",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "move",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "plan_recipe",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "plan_repair",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "prepare_field",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "record_event",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "refuel",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "repair",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "request_consent",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "reserve",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "rest",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "schedule_care",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "socialize",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "sow",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "store",
+      "runtime_status": "not_implemented"
+    },
+    {
+      "id": "trade_atomic",
+      "runtime_status": "not_implemented"
+    }
+  ]
+}

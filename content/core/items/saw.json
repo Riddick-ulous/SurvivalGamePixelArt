@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.saw",
+  "name_de": "Säge",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "sawing"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

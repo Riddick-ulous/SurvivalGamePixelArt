@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "id": "station.charcoal_clamp",
+  "name_de": "Kohlenmeiler",
+  "concurrent_jobs": 1,
+  "provision": "scenario_or_future_construction"
+}

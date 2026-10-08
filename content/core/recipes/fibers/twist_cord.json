@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "recipe.twist_cord",
+  "name_de": "Pflanzenschnur drehen",
+  "category": "fibers",
+  "tier": "prototype",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.twist_cord",
+  "station_id": "station.hand",
+  "inputs": [
+    {
+      "item_id": "item.plant_fiber",
+      "quantity": 0.2
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.cord",
+      "quantity": 3.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 40,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

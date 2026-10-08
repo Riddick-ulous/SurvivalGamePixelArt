@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "operations",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "operations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "runtime_status": {
+            "type": "string",
+            "enum": [
+              "not_implemented"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "runtime_status"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "schema_version",
+    "operations"
+  ],
+  "additionalProperties": false
+}

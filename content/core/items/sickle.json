@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.sickle",
+  "name_de": "Sichel",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "harvesting"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

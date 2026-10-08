@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.wool_raw",
+  "name_de": "Rohwolle",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "shearing"
+}

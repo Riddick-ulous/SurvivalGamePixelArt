@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "workflow.craft_target",
+  "name_de": "Gegenstand herstellen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Legitimer Auftrag für Zielmenge",
+  "goal_category": "production",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "plan_recipe",
+      "description_de": "Begrenzte Rückwärtsplanung über bekannte Verfahren"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Nächsten ausführbaren Schritt reservieren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "move",
+      "description_de": "Arbeitsplatz erreichen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "execute_recipe",
+      "description_de": "Rezeptauftrag ausführen"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "store",
+      "description_de": "Ergebnis übergeben"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

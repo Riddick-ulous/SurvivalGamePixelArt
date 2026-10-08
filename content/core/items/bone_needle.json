@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.bone_needle",
+  "name_de": "Knochennadel",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "sewing"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "recipe.press_juice",
+  "name_de": "Obst pressen",
+  "category": "brewing",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.press_juice",
+  "station_id": "station.press",
+  "inputs": [
+    {
+      "item_id": "item.fruit",
+      "quantity": 5.0
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.juice",
+      "quantity": 3.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 60,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

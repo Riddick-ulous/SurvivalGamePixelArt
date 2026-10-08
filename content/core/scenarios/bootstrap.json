@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "id": "scenario.bootstrap",
+  "description_de": "Geplanter Überlebenstest mit bewusst bereitgestellter Keramik; nicht der finale werkzeuglose Spielstart. Datenfixture, noch kein lauffähiges Szenario.",
+  "person_count": 2,
+  "known_recipes": [
+    "recipe.select_hammerstone",
+    "recipe.knap_flake",
+    "recipe.twist_cord",
+    "recipe.carve_handle",
+    "recipe.split_firewood",
+    "recipe.split_kindling",
+    "recipe.dry_tinder",
+    "recipe.boil_water"
+  ],
+  "inventory": [
+    {
+      "item_id": "item.hammerstone",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.stone_axe",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.pot",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.flint",
+      "quantity": 2.0
+    },
+    {
+      "item_id": "item.branch",
+      "quantity": 20.0
+    },
+    {
+      "item_id": "item.log",
+      "quantity": 3.0
+    },
+    {
+      "item_id": "item.water_raw",
+      "quantity": 5.0
+    },
+    {
+      "item_id": "item.bark",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.firewood",
+      "quantity": 10.0
+    },
+    {
+      "item_id": "item.tinder",
+      "quantity": 0.2
+    },
+    {
+      "item_id": "item.kindling",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.berries",
+      "quantity": 4.0
+    }
+  ],
+  "stations": [
+    "station.hand",
+    "station.hearth",
+    "station.shelter"
+  ],
+  "world_sources": [
+    "gather_deadwood",
+    "gather_stone",
+    "gather_flint",
+    "gather_fiber",
+    "gather_bark",
+    "fetch_water",
+    "forage",
+    "fell_tree"
+  ],
+  "initial_fire": "lit",
+  "notes_de": "Inventar pro Haushalt getrennt zuweisen; geteilte Werkzeuge nur mit Nutzungsrecht. Initialer Bestand ist die einzige zulässige Testausstattung."
+}

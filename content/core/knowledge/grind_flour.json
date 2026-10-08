@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.grind_flour",
+  "name_de": "Getreide mahlen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

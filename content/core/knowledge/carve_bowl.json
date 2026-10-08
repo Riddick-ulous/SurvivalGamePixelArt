@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.carve_bowl",
+  "name_de": "Holzschale schnitzen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

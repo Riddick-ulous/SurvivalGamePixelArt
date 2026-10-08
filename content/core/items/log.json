@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.log",
+  "name_de": "Stammholz",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "fell_tree"
+}

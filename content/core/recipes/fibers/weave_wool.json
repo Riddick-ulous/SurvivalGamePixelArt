@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "id": "recipe.weave_wool",
+  "name_de": "Wollstoff weben",
+  "category": "fibers",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.weave_wool",
+  "station_id": "station.loom",
+  "inputs": [
+    {
+      "item_id": "item.wool_yarn",
+      "quantity": 300.0
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.wool_cloth",
+      "quantity": 1.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 240,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

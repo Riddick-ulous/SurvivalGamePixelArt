@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.dry_bricks",
+  "name_de": "Lehmziegel trocknen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

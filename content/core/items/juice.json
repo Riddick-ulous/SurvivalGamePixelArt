@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.juice",
+  "name_de": "Obstsaft",
+  "unit": "l",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

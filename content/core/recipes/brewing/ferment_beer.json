@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "id": "recipe.ferment_beer",
+  "name_de": "Bier vergären",
+  "category": "brewing",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.ferment_beer",
+  "station_id": "station.shelter",
+  "inputs": [
+    {
+      "item_id": "item.wort",
+      "quantity": 6.0
+    },
+    {
+      "item_id": "item.starter",
+      "quantity": 1.0
+    }
+  ],
+  "tools": [
+    {
+      "capability": "fermentation_vessel",
+      "minimum_condition": 0.2,
+      "wear_per_batch": 0.01
+    }
+  ],
+  "outputs": [
+    {
+      "item_id": "item.beer",
+      "quantity": 5.5
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 20,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    },
+    {
+      "id": "process",
+      "mode": "passive",
+      "duration_game_minutes": 10080,
+      "environment_profile_id": "env.fermentation",
+      "on_condition_failure": "pause",
+      "max_blocked_game_minutes": 20160
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

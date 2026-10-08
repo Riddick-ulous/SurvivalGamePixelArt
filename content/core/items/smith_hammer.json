@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.smith_hammer",
+  "name_de": "Schmiedehammer",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "smithing"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

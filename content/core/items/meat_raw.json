@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.meat_raw",
+  "name_de": "Rohes Fleisch",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "butchery"
+}

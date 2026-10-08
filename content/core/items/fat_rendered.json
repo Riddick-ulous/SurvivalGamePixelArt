@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.fat_rendered",
+  "name_de": "Ausgelassenes Fett",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

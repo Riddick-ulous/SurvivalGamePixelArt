@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "id": "station.forge",
+  "name_de": "Schmiedeesse",
+  "concurrent_jobs": 1,
+  "provision": "scenario_or_future_construction"
+}

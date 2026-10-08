@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.iron_knife",
+  "name_de": "Eisenmesser",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "cutting"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

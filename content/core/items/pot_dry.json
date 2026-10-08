@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.pot_dry",
+  "name_de": "Getrockneter ungebrannter Topf",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

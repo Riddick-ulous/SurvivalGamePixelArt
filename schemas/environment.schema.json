@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "environment",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^env\\.[a-z][a-z0-9_]*$"
+    },
+    "scope": {
+      "type": "string",
+      "enum": [
+        "process_local"
+      ]
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "temperature_c_min": {
+          "type": "number"
+        },
+        "temperature_c_max": {
+          "type": "number"
+        },
+        "precipitation_exposure_max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "relative_humidity_max": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "balance_status": {
+      "type": "string",
+      "enum": [
+        "draft"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "scope",
+    "limits",
+    "balance_status"
+  ],
+  "additionalProperties": false
+}

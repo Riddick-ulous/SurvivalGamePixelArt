@@ -1,0 +1,10 @@
+.godot/
+**/bin/
+**/obj/
+__pycache__/
+*.pyc
+.venv/
+.env
+*.user
+saves/
+benchmarks/results/

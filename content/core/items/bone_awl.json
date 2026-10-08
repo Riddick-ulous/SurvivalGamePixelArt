@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.bone_awl",
+  "name_de": "Knochenahle",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "piercing"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

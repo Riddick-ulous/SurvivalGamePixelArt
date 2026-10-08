@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.split_firewood",
+  "name_de": "Brennholz spalten",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

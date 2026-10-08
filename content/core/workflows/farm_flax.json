@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "workflow.farm_flax",
+  "name_de": "Flachs anbauen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Genehmigter saisonaler Anbauplan",
+  "goal_category": "farming",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "check_rights",
+      "description_de": "Feldnutzungsrecht prüfen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "prepare_field",
+      "description_de": "Boden vorbereiten"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "sow",
+      "description_de": "Saat ausbringen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "schedule_care",
+      "description_de": "Wachstum und Pflege beobachten"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "harvest",
+      "description_de": "Flachs ernten"
+    },
+    {
+      "id": "step_6",
+      "operation_id": "store",
+      "description_de": "Ernte einlagern"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

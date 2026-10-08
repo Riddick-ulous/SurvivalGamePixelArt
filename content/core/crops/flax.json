@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "crop.flax",
+  "name_de": "Flachs",
+  "seed_item_id": "item.seed_flax",
+  "seed_kg_per_m2": 0.015,
+  "growth_game_minutes": 115200,
+  "harvest_item_id": "item.flax_straw",
+  "potential_yield_kg_per_m2": 0.5,
+  "water_optimum": 0.6,
+  "fertility_optimum": 0.6,
+  "balance_status": "draft",
+  "implementation_status": "defined",
+  "notes_de": "Ertrag nur aus bestehendem Pflanzenbestand; Wetter, Reife, Stress und Verluste reduzieren Potential. Wachstumsskala muss mit Jahreszeiten abgestimmt werden."
+}

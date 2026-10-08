@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.extract_tannin",
+  "name_de": "Gerbbrühe ansetzen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

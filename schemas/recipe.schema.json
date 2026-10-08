@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "recipe",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^recipe\\.[a-z][a-z0-9_]*$"
+    },
+    "name_de": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "tools",
+        "fibers",
+        "wood",
+        "pottery",
+        "food",
+        "brewing",
+        "leather",
+        "metal"
+      ]
+    },
+    "tier": {
+      "type": "string",
+      "enum": [
+        "prototype",
+        "expansion"
+      ]
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": [
+        "defined"
+      ]
+    },
+    "knowledge_id": {
+      "type": "string",
+      "pattern": "^knowledge\\.[a-z][a-z0-9_]*$"
+    },
+    "station_id": {
+      "type": "string",
+      "pattern": "^station\\.[a-z][a-z0-9_]*$"
+    },
+    "inputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "pattern": "^item\\.[a-z][a-z0-9_]*$"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "item_id",
+          "quantity"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "tools": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "capability": {
+            "type": "string"
+          },
+          "minimum_condition": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "wear_per_batch": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        },
+        "required": [
+          "capability",
+          "minimum_condition",
+          "wear_per_batch"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "pattern": "^item\\.[a-z][a-z0-9_]*$"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "item_id",
+          "quantity"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "phases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "active",
+              "passive"
+            ]
+          },
+          "duration_game_minutes": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "environment_profile_id": {
+            "type": "string",
+            "pattern": "^env\\.[a-z][a-z0-9_]*$"
+          },
+          "on_condition_failure": {
+            "type": "string",
+            "enum": [
+              "block",
+              "pause"
+            ]
+          },
+          "max_blocked_game_minutes": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "id",
+          "mode",
+          "duration_game_minutes",
+          "environment_profile_id",
+          "on_condition_failure"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "failure_output_policy": {
+      "type": "string",
+      "enum": [
+        "spoiled_workpiece"
+      ]
+    },
+    "balance_status": {
+      "type": "string",
+      "enum": [
+        "draft"
+      ]
+    },
+    "notes_de": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "name_de",
+    "category",
+    "tier",
+    "implementation_status",
+    "knowledge_id",
+    "station_id",
+    "inputs",
+    "tools",
+    "outputs",
+    "phases",
+    "failure_output_policy",
+    "balance_status",
+    "notes_de"
+  ],
+  "additionalProperties": false
+}

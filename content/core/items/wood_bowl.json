@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.wood_bowl",
+  "name_de": "Holzschale",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "container_cold"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

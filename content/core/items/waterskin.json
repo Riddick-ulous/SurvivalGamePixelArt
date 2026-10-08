@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.waterskin",
+  "name_de": "Wasserschlauch",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "container_cold"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

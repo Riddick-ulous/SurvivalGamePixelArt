@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.beer",
+  "name_de": "Jungbier",
+  "unit": "l",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

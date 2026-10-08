@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "id": "workflow.safe_water",
+  "name_de": "Trinkwasser bereitstellen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Trinkwasservorrat unter Ziel",
+  "goal_category": "water",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "plan_recipe",
+      "description_de": "Abkochen und fehlende Eingaben planen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Topf, Feuerstelle und Eingaben reservieren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "move",
+      "description_de": "Zur Feuerstelle gehen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "execute_recipe",
+      "description_de": "Wasser abkochen"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "store",
+      "description_de": "Ergebnis einlagern"
+    }
+  ],
+  "recipe_ids": [
+    "recipe.boil_water"
+  ],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

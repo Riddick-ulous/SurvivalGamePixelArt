@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.dry_tinder",
+  "name_de": "Rinde zu Zunder aufbereiten und trocknen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

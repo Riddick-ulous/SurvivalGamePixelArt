@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.press_juice",
+  "name_de": "Obst pressen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.ferment_mead",
+  "name_de": "Met vergären",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

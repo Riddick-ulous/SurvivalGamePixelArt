@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.linen_yarn",
+  "name_de": "Leinengarn",
+  "unit": "m",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

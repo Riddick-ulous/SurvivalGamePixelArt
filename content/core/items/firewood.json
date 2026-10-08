@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.firewood",
+  "name_de": "Scheitholz",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

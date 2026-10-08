@@ -1,0 +1,15 @@
+{
+  "schema_version": 1,
+  "id": "crop.wheat",
+  "name_de": "Weizen",
+  "seed_item_id": "item.seed_wheat",
+  "seed_kg_per_m2": 0.02,
+  "growth_game_minutes": 129600,
+  "harvest_item_id": "item.wheat",
+  "potential_yield_kg_per_m2": 0.4,
+  "water_optimum": 0.6,
+  "fertility_optimum": 0.6,
+  "balance_status": "draft",
+  "implementation_status": "defined",
+  "notes_de": "Ertrag nur aus bestehendem Pflanzenbestand; Wetter, Reife, Stress und Verluste reduzieren Potential. Wachstumsskala muss mit Jahreszeiten abgestimmt werden."
+}

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "station",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^station\\.[a-z][a-z0-9_]*$"
+    },
+    "name_de": {
+      "type": "string"
+    },
+    "concurrent_jobs": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "provision": {
+      "type": "string",
+      "enum": [
+        "virtual",
+        "scenario_or_future_construction"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "name_de",
+    "concurrent_jobs",
+    "provision"
+  ],
+  "additionalProperties": false
+}

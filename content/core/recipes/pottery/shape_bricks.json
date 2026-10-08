@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "recipe.shape_bricks",
+  "name_de": "Lehmziegel formen",
+  "category": "pottery",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.shape_bricks",
+  "station_id": "station.hand",
+  "inputs": [
+    {
+      "item_id": "item.clay_tempered",
+      "quantity": 5.0
+    },
+    {
+      "item_id": "item.straw",
+      "quantity": 0.2
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.brick_wet",
+      "quantity": 4.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 45,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "id": "recipe.finish_leather",
+  "name_de": "Leder fetten und weicharbeiten",
+  "category": "leather",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.finish_leather",
+  "station_id": "station.workbench",
+  "inputs": [
+    {
+      "item_id": "item.hide_tanned",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.fat_rendered",
+      "quantity": 0.1
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.leather",
+      "quantity": 1.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 180,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

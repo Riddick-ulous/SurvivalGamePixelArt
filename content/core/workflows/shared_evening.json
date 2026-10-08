@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "id": "workflow.shared_evening",
+  "name_de": "Gemeinsamen Abend organisieren",
+  "implementation_status": "defined",
+  "trigger_description_de": "Sozialer Anlass und ausreichende Reserven",
+  "goal_category": "social",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "request_consent",
+      "description_de": "Teilnehmende einladen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Zeit, Ort und Überschuss reservieren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "plan_recipe",
+      "description_de": "Verpflegung planen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "execute_recipe",
+      "description_de": "Verpflegung herstellen"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "socialize",
+      "description_de": "Abend durchführen"
+    },
+    {
+      "id": "step_6",
+      "operation_id": "cleanup",
+      "description_de": "Ort aufräumen"
+    },
+    {
+      "id": "step_7",
+      "operation_id": "record_event",
+      "description_de": "Erinnerungen schreiben"
+    }
+  ],
+  "recipe_ids": [
+    "recipe.cook_stew"
+  ],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

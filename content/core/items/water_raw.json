@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.water_raw",
+  "name_de": "Unbehandeltes Wasser",
+  "unit": "l",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "fetch_water"
+}

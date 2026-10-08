@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "id": "recipe.forge_knife",
+  "name_de": "Eisenmesser schmieden",
+  "category": "metal",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.forge_knife",
+  "station_id": "station.forge",
+  "inputs": [
+    {
+      "item_id": "item.wrought_iron",
+      "quantity": 0.3
+    },
+    {
+      "item_id": "item.charcoal",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.handle",
+      "quantity": 1.0
+    }
+  ],
+  "tools": [
+    {
+      "capability": "smithing",
+      "minimum_condition": 0.2,
+      "wear_per_batch": 0.01
+    },
+    {
+      "capability": "hot_grip",
+      "minimum_condition": 0.2,
+      "wear_per_batch": 0.01
+    }
+  ],
+  "outputs": [
+    {
+      "item_id": "item.iron_knife",
+      "quantity": 1.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 120,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

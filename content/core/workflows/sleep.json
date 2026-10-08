@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "id": "workflow.sleep",
+  "name_de": "Schlafen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Schlafschuld überschreitet Schwelle",
+  "goal_category": "rest",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "reserve",
+      "description_de": "Erlaubten Schlafplatz reservieren"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "move",
+      "description_de": "Schlafplatz erreichen"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "rest",
+      "description_de": "Bis Zielwert ruhen"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

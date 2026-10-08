@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.shovel",
+  "name_de": "Schaufel",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "digging"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "recipe.cook_meat",
+  "name_de": "Fleisch garen",
+  "category": "food",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.cook_meat",
+  "station_id": "station.hearth",
+  "inputs": [
+    {
+      "item_id": "item.meat_raw",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.firewood",
+      "quantity": 0.5
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.meat_cooked",
+      "quantity": 0.75
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 25,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    },
+    {
+      "id": "process",
+      "mode": "passive",
+      "duration_game_minutes": 20,
+      "environment_profile_id": "env.cooking",
+      "on_condition_failure": "pause",
+      "max_blocked_game_minutes": 40
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

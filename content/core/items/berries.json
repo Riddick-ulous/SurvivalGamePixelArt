@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.berries",
+  "name_de": "Beeren",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "forage"
+}

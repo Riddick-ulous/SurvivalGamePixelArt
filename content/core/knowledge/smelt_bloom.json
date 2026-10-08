@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.smelt_bloom",
+  "name_de": "Eisenluppe gewinnen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

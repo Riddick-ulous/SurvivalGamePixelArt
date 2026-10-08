@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.iron_axe",
+  "name_de": "Eisenaxt",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "chopping"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

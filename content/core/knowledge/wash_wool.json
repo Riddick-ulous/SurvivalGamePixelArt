@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.wash_wool",
+  "name_de": "Wolle waschen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.select_hammerstone",
+  "name_de": "Geeigneten Schlagstein auswählen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

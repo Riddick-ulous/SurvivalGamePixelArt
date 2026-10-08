@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "crop",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^crop\\.[a-z][a-z0-9_]*$"
+    },
+    "name_de": {
+      "type": "string"
+    },
+    "seed_item_id": {
+      "type": "string",
+      "pattern": "^item\\.[a-z][a-z0-9_]*$"
+    },
+    "seed_kg_per_m2": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "growth_game_minutes": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "harvest_item_id": {
+      "type": "string",
+      "pattern": "^item\\.[a-z][a-z0-9_]*$"
+    },
+    "potential_yield_kg_per_m2": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "water_optimum": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "fertility_optimum": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "balance_status": {
+      "type": "string",
+      "enum": [
+        "draft"
+      ]
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": [
+        "defined"
+      ]
+    },
+    "notes_de": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "name_de",
+    "seed_item_id",
+    "seed_kg_per_m2",
+    "growth_game_minutes",
+    "harvest_item_id",
+    "potential_yield_kg_per_m2",
+    "water_optimum",
+    "fertility_optimum",
+    "balance_status",
+    "implementation_status",
+    "notes_de"
+  ],
+  "additionalProperties": false
+}

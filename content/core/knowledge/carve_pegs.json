@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.carve_pegs",
+  "name_de": "Holzdübel schnitzen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

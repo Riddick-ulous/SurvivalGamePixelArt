@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.render_fat",
+  "name_de": "Fett auslassen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "id": "station.hand",
+  "name_de": "Freie Handarbeit",
+  "concurrent_jobs": 1,
+  "provision": "virtual"
+}

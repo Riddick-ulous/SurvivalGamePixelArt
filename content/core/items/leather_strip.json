@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.leather_strip",
+  "name_de": "Lederriemen",
+  "unit": "m",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

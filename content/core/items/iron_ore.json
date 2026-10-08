@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.iron_ore",
+  "name_de": "Eisenerz",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "mining"
+}

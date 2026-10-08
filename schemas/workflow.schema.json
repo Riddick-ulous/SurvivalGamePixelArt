@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "workflow",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^workflow\\.[a-z][a-z0-9_]*$"
+    },
+    "name_de": {
+      "type": "string"
+    },
+    "implementation_status": {
+      "type": "string",
+      "enum": [
+        "defined"
+      ]
+    },
+    "trigger_description_de": {
+      "type": "string"
+    },
+    "goal_category": {
+      "type": "string"
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "operation_id": {
+            "type": "string"
+          },
+          "description_de": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "operation_id",
+          "description_de"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "recipe_ids": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^recipe\\.[a-z][a-z0-9_]*$"
+      },
+      "minItems": 0
+    },
+    "on_blocked": {
+      "type": "object",
+      "properties": {
+        "release_unstarted_reservations": {
+          "type": "boolean"
+        },
+        "retry_on": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "resource_changed",
+              "path_changed",
+              "rights_changed",
+              "assignment_changed"
+            ]
+          },
+          "minItems": 1
+        },
+        "timeout_game_minutes": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      },
+      "required": [
+        "release_unstarted_reservations",
+        "retry_on",
+        "timeout_game_minutes"
+      ],
+      "additionalProperties": false
+    },
+    "notes_de": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "name_de",
+    "implementation_status",
+    "trigger_description_de",
+    "goal_category",
+    "steps",
+    "recipe_ids",
+    "on_blocked",
+    "notes_de"
+  ],
+  "additionalProperties": false
+}

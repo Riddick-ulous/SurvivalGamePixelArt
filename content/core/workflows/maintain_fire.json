@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "workflow.maintain_fire",
+  "name_de": "Feuer betreuen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Wärmebedarf oder geplanter Kochauftrag",
+  "goal_category": "heat",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "inspect",
+      "description_de": "Glut und Brennstoff prüfen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Brennstoff reservieren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "move",
+      "description_de": "Feuer erreichen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "refuel",
+      "description_de": "Verfügbaren Brennstoff nachlegen"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

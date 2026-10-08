@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.salt_hide",
+  "name_de": "Haut einsalzen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

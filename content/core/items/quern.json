@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.quern",
+  "name_de": "Handmühle",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "grinding"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

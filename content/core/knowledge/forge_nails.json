@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.forge_nails",
+  "name_de": "Nägel schmieden",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

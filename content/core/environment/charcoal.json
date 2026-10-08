@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "env.charcoal",
+  "scope": "process_local",
+  "limits": {
+    "temperature_c_min": 350,
+    "temperature_c_max": 550
+  },
+  "balance_status": "draft"
+}

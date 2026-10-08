@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "id": "workflow.collect_water",
+  "name_de": "Wasser beschaffen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Vorratsreichweite unter Ziel",
+  "goal_category": "water",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "check_rights",
+      "description_de": "Wasserstelle und Nutzungsrecht prüfen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Gefäß und Zielkapazität reservieren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "move",
+      "description_de": "Wasserstelle erreichen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "gather",
+      "description_de": "Wasser entnehmen"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "move",
+      "description_de": "Lager erreichen"
+    },
+    {
+      "id": "step_6",
+      "operation_id": "store",
+      "description_de": "Unbehandeltes Wasser einlagern"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

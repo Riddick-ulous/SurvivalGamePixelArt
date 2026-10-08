@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "id": "item.pot",
+  "name_de": "Gebrannter Topf",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "cooking_vessel",
+    "fermentation_vessel"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

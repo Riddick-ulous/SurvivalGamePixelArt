@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "id": "workflow.repair_tool",
+  "name_de": "Werkzeug instand halten",
+  "implementation_status": "defined",
+  "trigger_description_de": "Zustand unter Wartungsschwelle",
+  "goal_category": "maintenance",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "inspect",
+      "description_de": "Schaden und reparierbare Komponenten bestimmen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "plan_repair",
+      "description_de": "Passendes Reparaturverfahren ermitteln"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "reserve",
+      "description_de": "Werkzeug, Material und Platz reservieren"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "repair",
+      "description_de": "Reparatur ausführen"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

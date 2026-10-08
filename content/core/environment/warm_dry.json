@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "env.warm_dry",
+  "scope": "process_local",
+  "limits": {
+    "temperature_c_min": 25,
+    "temperature_c_max": 60,
+    "relative_humidity_max": 0.6
+  },
+  "balance_status": "draft"
+}

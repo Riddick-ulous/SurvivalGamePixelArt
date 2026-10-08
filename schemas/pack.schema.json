@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "pack",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^pack\\.[a-z][a-z0-9_]*$"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "design_baseline"
+      ]
+    },
+    "dependencies": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "version",
+    "status",
+    "dependencies"
+  ],
+  "additionalProperties": false
+}

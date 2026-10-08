@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.ferment_beer",
+  "name_de": "Bier vergären",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

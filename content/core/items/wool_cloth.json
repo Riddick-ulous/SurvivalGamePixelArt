@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.wool_cloth",
+  "name_de": "Wollgewebe",
+  "unit": "m2",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

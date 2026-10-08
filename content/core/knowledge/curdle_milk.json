@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.curdle_milk",
+  "name_de": "Milch dicklegen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

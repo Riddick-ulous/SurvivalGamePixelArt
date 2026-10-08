@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.sew_waterskin",
+  "name_de": "Wasserschlauch nähen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

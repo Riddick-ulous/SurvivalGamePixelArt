@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.flint",
+  "name_de": "Schlagbarer Feuerstein",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "gather_flint"
+}

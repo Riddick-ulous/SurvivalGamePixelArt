@@ -1,0 +1,7 @@
+{
+  "schema_version": 1,
+  "id": "station.pottery_kiln",
+  "name_de": "Keramikofen",
+  "concurrent_jobs": 1,
+  "provision": "scenario_or_future_construction"
+}

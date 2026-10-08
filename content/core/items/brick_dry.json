@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.brick_dry",
+  "name_de": "Luftgetrockneter Lehmziegel",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

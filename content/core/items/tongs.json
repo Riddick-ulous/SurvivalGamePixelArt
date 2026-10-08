@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.tongs",
+  "name_de": "Schmiedezange",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "hot_grip"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

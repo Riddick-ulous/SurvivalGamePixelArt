@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.hide_tanned",
+  "name_de": "Nasses gegerbtes Leder",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

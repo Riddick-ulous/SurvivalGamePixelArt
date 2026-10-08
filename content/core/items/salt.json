@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.salt",
+  "name_de": "Salz",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "trade_or_mining"
+}

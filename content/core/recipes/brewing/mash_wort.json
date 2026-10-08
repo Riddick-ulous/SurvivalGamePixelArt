@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "id": "recipe.mash_wort",
+  "name_de": "Malz schroten und maischen",
+  "category": "brewing",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.mash_wort",
+  "station_id": "station.hearth",
+  "inputs": [
+    {
+      "item_id": "item.malt",
+      "quantity": 2.0
+    },
+    {
+      "item_id": "item.water_safe",
+      "quantity": 8.0
+    },
+    {
+      "item_id": "item.firewood",
+      "quantity": 2.0
+    }
+  ],
+  "tools": [
+    {
+      "capability": "grinding",
+      "minimum_condition": 0.2,
+      "wear_per_batch": 0.01
+    },
+    {
+      "capability": "cooking_vessel",
+      "minimum_condition": 0.2,
+      "wear_per_batch": 0.01
+    }
+  ],
+  "outputs": [
+    {
+      "item_id": "item.wort",
+      "quantity": 6.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 90,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    },
+    {
+      "id": "process",
+      "mode": "passive",
+      "duration_game_minutes": 60,
+      "environment_profile_id": "env.mashing",
+      "on_condition_failure": "pause",
+      "max_blocked_game_minutes": 120
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

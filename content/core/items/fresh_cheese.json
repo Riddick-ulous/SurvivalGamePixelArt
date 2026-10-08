@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.fresh_cheese",
+  "name_de": "Frischkäse",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

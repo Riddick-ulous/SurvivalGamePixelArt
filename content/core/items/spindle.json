@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.spindle",
+  "name_de": "Handspindel",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "spinning"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "scenario_or_trade"
+}

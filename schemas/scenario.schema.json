@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "scenario",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^scenario\\.[a-z][a-z0-9_]*$"
+    },
+    "description_de": {
+      "type": "string"
+    },
+    "person_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "known_recipes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^recipe\\.[a-z][a-z0-9_]*$"
+      },
+      "minItems": 0
+    },
+    "inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string",
+            "pattern": "^item\\.[a-z][a-z0-9_]*$"
+          },
+          "quantity": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          }
+        },
+        "required": [
+          "item_id",
+          "quantity"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 0
+    },
+    "stations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^station\\.[a-z][a-z0-9_]*$"
+      },
+      "minItems": 0
+    },
+    "world_sources": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    },
+    "initial_fire": {
+      "type": "string",
+      "enum": [
+        "lit",
+        "unlit"
+      ]
+    },
+    "notes_de": {
+      "type": "string"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "description_de",
+    "person_count",
+    "known_recipes",
+    "inventory",
+    "stations",
+    "world_sources",
+    "initial_fire",
+    "notes_de"
+  ],
+  "additionalProperties": false
+}

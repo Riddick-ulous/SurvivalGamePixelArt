@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.hide_salted",
+  "name_de": "Gesalzene Haut",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

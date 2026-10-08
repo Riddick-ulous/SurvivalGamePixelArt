@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.drain_cheese",
+  "name_de": "Frischkäse abtropfen lassen",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "id": "workflow.prepare_meal",
+  "name_de": "Mahlzeit zubereiten",
+  "implementation_status": "defined",
+  "trigger_description_de": "Hunger oder geplanter Essenszeitpunkt",
+  "goal_category": "food",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "plan_recipe",
+      "description_de": "Bekanntes machbares Essen auswählen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Zutaten, Geräte und Platz reservieren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "move",
+      "description_de": "Arbeitsplatz erreichen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "execute_recipe",
+      "description_de": "Mahlzeit zubereiten"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "store",
+      "description_de": "Portionen zuordnen"
+    }
+  ],
+  "recipe_ids": [
+    "recipe.make_porridge",
+    "recipe.cook_stew"
+  ],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

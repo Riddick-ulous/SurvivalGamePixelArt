@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "item",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^item\\.[a-z][a-z0-9_]*$"
+    },
+    "name_de": {
+      "type": "string"
+    },
+    "unit": {
+      "type": "string",
+      "enum": [
+        "piece",
+        "kg",
+        "l",
+        "m",
+        "m2"
+      ]
+    },
+    "stackable": {
+      "type": "boolean"
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 0
+    },
+    "state_fields": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "quality",
+          "moisture",
+          "condition"
+        ]
+      },
+      "minItems": 0
+    },
+    "external_source": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "name_de",
+    "unit",
+    "stackable",
+    "capabilities",
+    "state_fields",
+    "external_source"
+  ],
+  "additionalProperties": false
+}

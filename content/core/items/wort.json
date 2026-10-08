@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.wort",
+  "name_de": "Würze",
+  "unit": "l",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

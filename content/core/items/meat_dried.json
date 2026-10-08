@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.meat_dried",
+  "name_de": "Trockenfleisch",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

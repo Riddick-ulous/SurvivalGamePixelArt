@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "id": "workflow.trade",
+  "name_de": "Vereinbarten Tausch erfüllen",
+  "implementation_status": "defined",
+  "trigger_description_de": "Bestätigtes Angebot",
+  "goal_category": "economy",
+  "steps": [
+    {
+      "id": "step_1",
+      "operation_id": "request_consent",
+      "description_de": "Angebot bestätigen"
+    },
+    {
+      "id": "step_2",
+      "operation_id": "reserve",
+      "description_de": "Beide Gegenleistungen sperren"
+    },
+    {
+      "id": "step_3",
+      "operation_id": "move",
+      "description_de": "Übergabeort erreichen"
+    },
+    {
+      "id": "step_4",
+      "operation_id": "trade_atomic",
+      "description_de": "Eigentum und Verpflichtungen atomar übertragen"
+    },
+    {
+      "id": "step_5",
+      "operation_id": "record_event",
+      "description_de": "Vertragserfüllung dokumentieren"
+    }
+  ],
+  "recipe_ids": [],
+  "on_blocked": {
+    "release_unstarted_reservations": true,
+    "retry_on": [
+      "resource_changed",
+      "path_changed",
+      "rights_changed",
+      "assignment_changed"
+    ],
+    "timeout_game_minutes": 60
+  },
+  "notes_de": "Geordnete Vorlage, keine ausführbare universelle Skriptsprache. Operationen benötigen explizite C#-Handler. Schlaf-, Reparatur- und Landwirtschaftslogik sind noch nicht implementiert."
+}

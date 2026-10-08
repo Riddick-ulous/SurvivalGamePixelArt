@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "id": "recipe.clean_hide",
+  "name_de": "Haut reinigen und entfleischen",
+  "category": "leather",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.clean_hide",
+  "station_id": "station.hand",
+  "inputs": [
+    {
+      "item_id": "item.hide_raw",
+      "quantity": 1.0
+    },
+    {
+      "item_id": "item.water_raw",
+      "quantity": 3.0
+    }
+  ],
+  "tools": [
+    {
+      "capability": "cutting",
+      "minimum_condition": 0.2,
+      "wear_per_batch": 0.01
+    }
+  ],
+  "outputs": [
+    {
+      "item_id": "item.hide_clean",
+      "quantity": 1.0
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 90,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

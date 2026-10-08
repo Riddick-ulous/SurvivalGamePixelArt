@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "id": "recipe.drain_cheese",
+  "name_de": "Frischkäse abtropfen lassen",
+  "category": "food",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.drain_cheese",
+  "station_id": "station.shelter",
+  "inputs": [
+    {
+      "item_id": "item.curd",
+      "quantity": 0.8
+    },
+    {
+      "item_id": "item.salt",
+      "quantity": 0.02
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.fresh_cheese",
+      "quantity": 0.6
+    },
+    {
+      "item_id": "item.whey",
+      "quantity": 0.2
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 15,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    },
+    {
+      "id": "process",
+      "mode": "passive",
+      "duration_game_minutes": 240,
+      "environment_profile_id": "env.cool",
+      "on_condition_failure": "pause",
+      "max_blocked_game_minutes": 480
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

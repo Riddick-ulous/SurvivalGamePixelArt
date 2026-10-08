@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "item.hammerstone",
+  "name_de": "Schlagstein",
+  "unit": "piece",
+  "stackable": false,
+  "capabilities": [
+    "percussion"
+  ],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

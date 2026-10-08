@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "id": "recipe.dry_berries",
+  "name_de": "Beeren trocknen",
+  "category": "food",
+  "tier": "expansion",
+  "implementation_status": "defined",
+  "knowledge_id": "knowledge.dry_berries",
+  "station_id": "station.drying_rack",
+  "inputs": [
+    {
+      "item_id": "item.berries",
+      "quantity": 1.0
+    }
+  ],
+  "tools": [],
+  "outputs": [
+    {
+      "item_id": "item.berries_dried",
+      "quantity": 0.2
+    }
+  ],
+  "phases": [
+    {
+      "id": "work",
+      "mode": "active",
+      "duration_game_minutes": 15,
+      "environment_profile_id": "env.any",
+      "on_condition_failure": "block"
+    },
+    {
+      "id": "process",
+      "mode": "passive",
+      "duration_game_minutes": 2880,
+      "environment_profile_id": "env.dry",
+      "on_condition_failure": "pause",
+      "max_blocked_game_minutes": 5760
+    }
+  ],
+  "failure_output_policy": "spoiled_workpiece",
+  "balance_status": "draft",
+  "notes_de": "Mengen, Ausbeuten und Zeiten sind vorläufige Spielwerte; fachlich und spielerisch zu prüfen."
+}

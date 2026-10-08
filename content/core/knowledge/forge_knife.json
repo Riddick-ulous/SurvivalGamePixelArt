@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.forge_knife",
+  "name_de": "Eisenmesser schmieden",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

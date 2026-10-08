@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.manure",
+  "name_de": "Mist",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "animal_waste"
+}

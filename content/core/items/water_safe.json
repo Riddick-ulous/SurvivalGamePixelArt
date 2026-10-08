@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.water_safe",
+  "name_de": "Aufbereitetes Wasser",
+  "unit": "l",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

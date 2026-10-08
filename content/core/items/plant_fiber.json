@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.plant_fiber",
+  "name_de": "Pflanzenfasern",
+  "unit": "kg",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "gather_fiber"
+}

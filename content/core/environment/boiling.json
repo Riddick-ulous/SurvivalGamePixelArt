@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "id": "env.boiling",
+  "scope": "process_local",
+  "limits": {
+    "temperature_c_min": 100
+  },
+  "balance_status": "draft"
+}

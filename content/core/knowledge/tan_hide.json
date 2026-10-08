@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "knowledge.tan_hide",
+  "name_de": "Haut pflanzlich gerben",
+  "acquisition": [
+    "instruction",
+    "scenario"
+  ],
+  "notes_de": "Verfahrenskenntnis und Ausführungsfähigkeit sind getrennt."
+}

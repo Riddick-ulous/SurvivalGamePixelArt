@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.stone_axe_head",
+  "name_de": "Geschliffener Steinaxtkopf",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

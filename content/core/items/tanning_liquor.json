@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.tanning_liquor",
+  "name_de": "Gerbbrühe",
+  "unit": "l",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": null
+}

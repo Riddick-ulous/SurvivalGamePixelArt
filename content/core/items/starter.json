@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "id": "item.starter",
+  "name_de": "Gärkultur",
+  "unit": "piece",
+  "stackable": true,
+  "capabilities": [],
+  "state_fields": [
+    "quality",
+    "moisture",
+    "condition"
+  ],
+  "external_source": "trade_or_culture"
+}
