@@ -23,11 +23,12 @@ var r6_debug: bool = false
 var lighting_debug_mode: int = 0
 var shadow_test: bool = false
 var sun_direction_id: int = 0
-@export_range(0.0, 3.0, 0.05) var sun_energy: float = 0.95
-@export_range(0.0, 2.0, 0.05) var ambient_energy: float = 0.45
+@export_range(0.0, 3.0, 0.05) var sun_energy: float = 0.80
+@export_range(0.0, 2.0, 0.05) var ambient_energy: float = 0.30
 var r71_environment: Environment
 var r71_sun: DirectionalLight3D
 var reference_mesh: MeshInstance3D
+var show_light_reference: bool = false
 
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
@@ -216,7 +217,7 @@ func _update_scene() -> void:
     r71_environment.ambient_light_energy = ambient_energy
     r71_sun.shadow_enabled = shadow_test if mode_id >= 8 else true
     r71_sun.rotation_degrees = Vector3(-60.0,-45.0,0.0) if sun_direction_id == 0 else Vector3(-48.0,125.0,0.0)
-    reference_mesh.visible = mode_id >= 8
+    reference_mesh.visible = mode_id >= 8 and show_light_reference
     terrain_material.set_shader_parameter("r71_debug_mode",lighting_debug_mode if mode_id >= 8 else 0)
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
@@ -227,7 +228,7 @@ func _update_scene() -> void:
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
-    info.text = "%s | %s | pitch %.0f° | %s\n1-0: R0-R7.2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7+: L debug H shadows J sun  T/Y sun -/+ G/U ambient -/+\nSun %.2f  Ambient %.2f   R4-R7 use image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label,sun_energy,ambient_energy]
+    info.text = "%s | %s | pitch %.0f° | %s\n1-0: R0-R7.2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7+: L debug H shadows J sun K reference T/Y sun -/+ G/U ambient -/+\nSun %.2f  Ambient %.2f   R4-R7 use image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label,sun_energy,ambient_energy]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -247,6 +248,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
             lighting_debug_mode = (lighting_debug_mode+1)%4
         KEY_H: shadow_test = not shadow_test
         KEY_J: sun_direction_id = (sun_direction_id+1)%2
+        KEY_K: show_light_reference = not show_light_reference
         KEY_T: sun_energy = maxf(0.0,sun_energy-0.15)
         KEY_Y: sun_energy = minf(3.0,sun_energy+0.15)
         KEY_G: ambient_energy = maxf(0.0,ambient_energy-0.10)
