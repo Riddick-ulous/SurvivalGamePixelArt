@@ -1,10 +1,11 @@
 extends Node3D
 ## Isolated, deterministic Godot 4 spike. No Simulation.Core or tileset dependency.
 const GRID := 64
+const R7_GRID := 128
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -23,6 +24,7 @@ var r6_debug: bool = false
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
     _build_camera()
+    _build_lighting()
     _build_terrain()
     _build_decor()
     _build_r3_assets()
@@ -44,11 +46,39 @@ func _position_camera() -> void:
     camera.position = Vector3(8.0, 18.0*sin(angle), 8.0+18.0*cos(angle))
     camera.look_at(Vector3(8.0,0.0,8.0),Vector3.UP)
 
+func _build_lighting() -> void:
+    var sun := DirectionalLight3D.new()
+    sun.name = "R7_Sun"
+    sun.rotation_degrees = Vector3(-52.0,-38.0,0.0)
+    sun.light_energy = 1.25
+    sun.shadow_enabled = true
+    add_child(sun)
+    var environment := WorldEnvironment.new()
+    var settings := Environment.new()
+    settings.background_mode = Environment.BG_COLOR
+    settings.background_color = Color(0.13,0.17,0.18)
+    settings.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+    settings.ambient_light_color = Color(0.75,0.80,0.83)
+    settings.ambient_light_energy = 0.48
+    environment.environment = settings
+    add_child(environment)
+    sun.visible = false
+
+func _r7_depth(x: float,z: float) -> float:
+    var dx: float = x-8.2
+    var dz: float = z-8.0
+    var irregular: float = 0.08*sin(dx*7.1+dz*2.3)+0.06*sin(dz*8.3-dx*3.1)
+    var p := Vector2(absf(dx),absf(dz))-Vector2(1.45+irregular,1.45-irregular)
+    var d: float = Vector2(maxf(p.x,0.0),maxf(p.y,0.0)).length()+minf(maxf(p.x,p.y),0.0)-0.16
+    return 1.1*(1.0-smoothstep(-0.35,0.17,d))
+
 func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
     var d: float = Vector2(x-8.2,z-8.0).length()
     if case_id == 1:
-        if mode_id == 6:
+        if mode_id == 7:
+            h -= _r7_depth(x,z)
+        elif mode_id == 6:
             # Flatter excavated floor with steeper but resolvable banks.
             h -= 1.05*(1.0-smoothstep(1.25,2.20,d))
         else:
@@ -74,26 +104,35 @@ func _rebuild_mesh() -> void:
     var verts := PackedVector3Array()
     var colors := PackedColorArray()
     var indices := PackedInt32Array()
-    for z in range(GRID+1):
+    var normals := PackedVector3Array()
+    var grid: int = R7_GRID if mode_id == 7 else GRID
+    var step_size: float = EXTENT/float(grid)
+    for z in range(grid+1):
         for x in range(GRID+1):
-            var px := float(x)*STEP
-            var pz := float(z)*STEP
+            var px := float(x)*step_size
+            var pz := float(z)*step_size
             verts.append(Vector3(px,_height(px,pz),pz))
             var cut_depth: float = 0.0
-            if mode_id == 6 and case_id == 1:
+            if mode_id == 7 and case_id == 1:
+                cut_depth = _r7_depth(px,pz)
+            elif mode_id == 6 and case_id == 1:
                 cut_depth = 1.05*(1.0-smoothstep(1.25,2.20,Vector2(px-8.2,pz-8.0).length()))
             colors.append(Color(_grass(px,pz),cut_depth,0,1))
-    for z in range(GRID):
+            var sx: float = _height(px+step_size,pz)-_height(px-step_size,pz)
+            var sz: float = _height(px,pz+step_size)-_height(px,pz-step_size)
+            normals.append(Vector3(-sx,2.0*step_size,-sz).normalized())
+    for z in range(grid):
         for x in range(GRID):
-            var a := z*(GRID+1)+x
+            var a := z*(grid+1)+x
             var b := a+1
-            var c := a+(GRID+1)
+            var c := a+(grid+1)
             var d := c+1
             indices.append_array(PackedInt32Array([a,c,b,b,c,d]))
     var arrays := []
     arrays.resize(Mesh.ARRAY_MAX)
     arrays[Mesh.ARRAY_VERTEX] = verts
     arrays[Mesh.ARRAY_COLOR] = colors
+    arrays[Mesh.ARRAY_NORMAL] = normals
     arrays[Mesh.ARRAY_INDEX] = indices
     var mesh := ArrayMesh.new()
     mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
@@ -142,6 +181,7 @@ func _update_scene() -> void:
         push_warning("Image materials missing in res://materials/")
     _rebuild_mesh()
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
+    get_node("R7_Sun").visible = mode_id == 7
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
@@ -151,7 +191,7 @@ func _update_scene() -> void:
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
-    info.text = "%s | %s | pitch %.0f° | %s\n1-7: R0-R6   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: toggle zoom   S: screenshot\nR4-R6 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
+    info.text = "%s | %s | pitch %.0f° | %s\n1-8: R0-R7   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: toggle zoom   S: screenshot\nR4-R7 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -164,6 +204,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_5: mode_id = 4
         KEY_6: mode_id = 5
         KEY_7: mode_id = 6
+        KEY_8: mode_id = 7
         KEY_Z: close_camera = not close_camera
         KEY_A: case_id = 0
         KEY_B: case_id = 1
