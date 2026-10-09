@@ -5,7 +5,7 @@ const R7_GRID := 128
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug", "R7.2 grass edge geometry"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug", "R7.2 grass edge geometry", "R8 forest placeables"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -14,6 +14,7 @@ var terrain_material: ShaderMaterial
 var camera: Camera3D
 var info: Label
 var decor_root: Node3D
+var r8_root: Node3D
 var pitch := 45.0
 var r3_atlas: Texture2D
 var r3_overlay: Texture2D
@@ -38,6 +39,7 @@ func _ready() -> void:
     _build_terrain()
     _build_decor()
     _build_r3_assets()
+    _build_r8_placeables()
     _load_r4_materials()
     _build_ui()
     _update_scene()
@@ -126,7 +128,7 @@ func _path_edge_distance(x: float, z: float) -> float:
 func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
     var d: float = Vector2(x-8.2,z-8.0).length()
-    if mode_id == 9:
+    if mode_id >= 9:
         # A shallow, physically raised grass sod at the compacted path edge.
         # World-space, independent of terrain tessellation and texture scale.
         var edge: float = _path_edge_distance(x,z)
@@ -177,7 +179,7 @@ func _rebuild_mesh() -> void:
                 cut_depth = _r7_depth(px,pz)
             elif mode_id == 6 and case_id == 1:
                 cut_depth = 1.05*(1.0-smoothstep(1.25,2.20,Vector2(px-8.2,pz-8.0).length()))
-            colors.append(Color(_grass(px,pz),cut_depth,clampf((_path_edge_distance(px,pz)+2.0)/4.0,0.0,1.0) if mode_id == 9 else 0.0,1))
+            colors.append(Color(_grass(px,pz),cut_depth,clampf((_path_edge_distance(px,pz)+2.0)/4.0,0.0,1.0) if mode_id >= 9 else 0.0,1))
             var sx: float = _height(px+step_size,pz)-_height(px-step_size,pz)
             var sz: float = _height(px,pz+step_size)-_height(px,pz-step_size)
             normals.append(Vector3(-sx,2.0*step_size,-sz).normalized())
@@ -227,6 +229,66 @@ func _build_decor() -> void:
         item.set_meta("ground_z",z)
         decor_root.add_child(item)
 
+func _build_r8_placeables() -> void:
+    r8_root = Node3D.new()
+    r8_root.name = "R8_ForestPlaceables"
+    add_child(r8_root)
+    r8_root.visible = false
+    var manifest_path := "res://r8_placeables/placeables.json"
+    if not FileAccess.file_exists(manifest_path):
+        push_warning("R8 assets missing: copy r8_placeables/ into the Godot project root.")
+        return
+    var manifest: Variant = JSON.parse_string(FileAccess.get_file_as_string(manifest_path))
+    if not (manifest is Dictionary) or not manifest.has("assets"):
+        push_error("R8 manifest invalid")
+        return
+    var definitions: Array = manifest["assets"]
+    var rng := RandomNumberGenerator.new()
+    rng.seed = SEED + 8000
+    var accepted: Array[Vector2] = []
+    for attempt in range(500):
+        var x := rng.randf_range(0.5,15.5)
+        var z := rng.randf_range(0.5,15.5)
+        var edge := _path_edge_distance(x,z)
+        if edge < 0.40 or _grass(x,z) < 0.53:
+            continue
+        var clustered := sin(x*0.83+0.5)*cos(z*1.09-0.3)
+        if rng.randf() > clampf(0.36+0.40*clustered,0.07,0.85):
+            continue
+        var definition: Dictionary = definitions[rng.randi_range(0,definitions.size()-1)]
+        var kind: String = str(definition["type"])
+        if kind in ["sapling","shrub","deadwood"] and edge < 1.0:
+            continue
+        var clearance := 0.60 if kind in ["sapling","shrub"] else 0.18
+        var too_close := false
+        for previous in accepted:
+            if previous.distance_to(Vector2(x,z)) < clearance:
+                too_close = true
+                break
+        if too_close:
+            continue
+        var tex_path := "res://r8_placeables/" + str(definition["file"])
+        var texture := load(tex_path) as Texture2D
+        if texture == null:
+            continue
+        var sprite := Sprite3D.new()
+        sprite.texture = texture
+        sprite.pixel_size = float(definition["world_height_m"])/maxf(float(texture.get_height()),1.0)
+        sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+        sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+        sprite.transparent = true
+        sprite.shaded = true
+        sprite.alpha_cut = SpriteBase3D.ALPHA_CUT_DISCARD
+        sprite.position = Vector3(x,0,z)
+        sprite.offset = Vector2(0,-float(texture.get_height())*0.5)
+        sprite.set_meta("ground_x",x)
+        sprite.set_meta("ground_z",z)
+        sprite.set_meta("asset_id",definition["id"])
+        r8_root.add_child(sprite)
+        accepted.append(Vector2(x,z))
+        if accepted.size() >= 160:
+            break
+
 func _build_ui() -> void:
     var ui := CanvasLayer.new()
     add_child(ui)
@@ -242,7 +304,9 @@ func _update_scene() -> void:
     if mode_id >= 4 and not r4_ready:
         push_warning("Material textures missing for %s; restore res://materials PNG files." % MODES[mode_id])
     _rebuild_mesh()
-    terrain_material.set_shader_parameter("render_mode_id",mode_id)
+    terrain_material.set_shader_parameter("render_mode_id",mini(mode_id,9))
+    if r8_root != null:
+        r8_root.visible = mode_id == 10
     r71_sun.visible = mode_id >= 7
     r71_sun.light_energy = sun_energy
     r71_environment.ambient_light_energy = ambient_energy
@@ -254,13 +318,18 @@ func _update_scene() -> void:
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
     decor_root.visible = mode_id == 3
+    if r8_root != null:
+        for item in r8_root.get_children():
+            var x: float = item.get_meta("ground_x")
+            var z: float = item.get_meta("ground_z")
+            item.position.y = _height(x,z)
     for item in decor_root.get_children():
         var x: float = item.get_meta("ground_x")
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
     var texture_status: String = "textures OK" if r4_ready else "MISSING PNG TEXTURES (see Output)"
-    info.text = "%s | %s | pitch %.0f° | %s | %s\n1-0: R0-R7.2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7+: L debug H shadows J sun K reference T/Y sun -/+ G/U ambient -/+\nSun %.2f  Ambient %.2f   R4-R7 use image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label,texture_status,sun_energy,ambient_energy]
+    info.text = "%s | %s | pitch %.0f° | %s | %s\n1-0: R0-R7.2   P: R8 placeables   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7+: L debug H shadows J sun K reference T/Y sun -/+ G/U ambient -/+\nSun %.2f  Ambient %.2f   R4-R7 use image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label,texture_status,sun_energy,ambient_energy]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -276,6 +345,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_8: mode_id = 7
         KEY_9: mode_id = 8
         KEY_0: mode_id = 9
+        KEY_P: mode_id = 10
         KEY_L:
             lighting_debug_mode = (lighting_debug_mode+1)%4
         KEY_H: shadow_test = not shadow_test
