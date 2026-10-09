@@ -225,9 +225,7 @@ func _build_ui() -> void:
 
 func _update_scene() -> void:
     if mode_id >= 4 and not r4_ready:
-        push_error("Selected %s but image textures are unavailable. Check res://materials/grass_a_256.png, grass_b_256.png, soil_256.png" % MODES[mode_id])
-        # Keep requested mode selected so the UI exposes the actual failure.
-        # Missing samplers will not display correctly until the files are loaded.
+        push_warning("Material textures missing for %s; restore res://materials PNG files." % MODES[mode_id])
     _rebuild_mesh()
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
     r71_sun.visible = mode_id >= 7
