@@ -5,6 +5,10 @@ uniform int render_mode_id = 0;
 uniform float world_scale = 32.0;
 uniform float seed = 19.0;
 uniform sampler2D r3_atlas : source_color, filter_nearest, repeat_enable;
+uniform sampler2D grass_a_tex : source_color, filter_nearest, repeat_enable;
+uniform sampler2D grass_b_tex : source_color, filter_nearest, repeat_enable;
+uniform sampler2D soil_tex : source_color, filter_nearest, repeat_enable;
+uniform float material_meters = 8.0;
 
 varying vec3 world_pos;
 varying float grass;
@@ -37,6 +41,22 @@ void fragment() {
         vec3 turf = mix(vec3(0.16,0.29,0.12),vec3(0.46,0.55,0.24),0.6*large+0.4*medium);
         float blend = smoothstep(0.26,0.74,g+0.14*(medium-0.5));
         ALBEDO = mix(earth,turf,blend)*(0.90+0.20*fine);
+    } else if (render_mode_id == 4) {
+        // R4: real generated material PNGs, world-space 8m per image.
+        // Alternating grass sources per 8m macro cell; intentionally simple
+        // baseline to expose repeated motifs and texture discontinuities.
+        vec2 material_pos = p / material_meters;
+        vec2 uv = fract(material_pos);
+        vec2 cell = floor(material_pos);
+        float selector = hash21(cell);
+        vec3 turf_a = texture(grass_a_tex,uv).rgb;
+        vec3 turf_b = texture(grass_b_tex,uv).rgb;
+        vec3 turf = mix(turf_a,turf_b,step(0.5,selector));
+        vec3 earth = texture(soil_tex,uv).rgb;
+        // Pixel-sized threshold jitter avoids blurred grass/soil edges.
+        float boundary = hash21(floor(p*32.0)) - 0.5;
+        float blend = step(0.5,g + 0.16*boundary);
+        ALBEDO = mix(earth,turf,blend);
     } else if (render_mode_id == 3) {
         // R3: 2 hand-structured procedural atlases, repeated in world coordinates.
         // Texture atlas: grass left half, soil right half.

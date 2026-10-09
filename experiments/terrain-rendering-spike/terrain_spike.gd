@@ -4,7 +4,7 @@ const GRID := 64
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -16,6 +16,7 @@ var decor_root: Node3D
 var pitch := 45.0
 var r3_atlas: Texture2D
 var r3_overlay: Texture2D
+var r4_ready: bool = false
 
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
@@ -23,6 +24,7 @@ func _ready() -> void:
     _build_terrain()
     _build_decor()
     _build_r3_assets()
+    _load_r4_materials()
     _build_ui()
     _update_scene()
 
@@ -130,12 +132,15 @@ func _update_scene() -> void:
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
+    if mode_id == 4 and not r4_ready:
+        mode_id = 3
+        push_warning("R4 PNGs missing. Copy grass_a_256.png, grass_b_256.png, soil_256.png to res://materials/")
     decor_root.visible = mode_id == 3
     for item in decor_root.get_children():
         var x: float = item.get_meta("ground_x")
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
-    info.text = "%s | %s | pitch %.0f°\n1/2/3/4: R0/R1/R2/R3   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   S: save screenshot\nProcedural materials, not reference-derived assets" % [MODES[mode_id],CASES[case_id],pitch]
+    info.text = "%s | %s | pitch %.0f°\n1/2/3/4/5: R0/R1/R2/R3/R4   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   S: save screenshot\nProcedural materials, not reference-derived assets" % [MODES[mode_id],CASES[case_id],pitch]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -145,6 +150,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_2: mode_id = 1
         KEY_3: mode_id = 2
         KEY_4: mode_id = 3
+        KEY_5: mode_id = 4
         KEY_A: case_id = 0
         KEY_B: case_id = 1
         KEY_C: case_id = 2
@@ -225,3 +231,20 @@ func _build_r3_assets() -> void:
         sprite.set_meta("ground_x",x)
         sprite.set_meta("ground_z",z)
         decor_root.add_child(sprite)
+
+func _load_r4_materials() -> void:
+    var files := ["res://materials/grass_a_256.png", "res://materials/grass_b_256.png", "res://materials/soil_256.png"]
+    for path in files:
+        if not ResourceLoader.exists(path):
+            push_warning("R4 missing texture: " + path)
+            return
+    var grass_a: Texture2D = load(files[0]) as Texture2D
+    var grass_b: Texture2D = load(files[1]) as Texture2D
+    var soil: Texture2D = load(files[2]) as Texture2D
+    if grass_a == null or grass_b == null or soil == null:
+        push_error("R4 could not load material textures")
+        return
+    terrain_material.set_shader_parameter("grass_a_tex",grass_a)
+    terrain_material.set_shader_parameter("grass_b_tex",grass_b)
+    terrain_material.set_shader_parameter("soil_tex",soil)
+    r4_ready = true
