@@ -66,7 +66,7 @@ Der Anker einer stehenden Figur liegt unter den Füßen, bei einem Baum am Stamm
 ### 5.1 Von der Art Direction zu kleinen kontrollierten Einheiten
 
 - Freigegebene Referenzbilder für Perspektive, Palette, Licht und Proportionen zusammenstellen.
-- Ein **Kalibrierblatt** entwerfen: 32×32-m- bzw. 32×32-px-Ground-Tile, Erwachsene in 32×32-px-Rahmen, 20×20 sichtbare Kinderfigur als optionale Studie, Lagerfeuer, junges Gehölz, große Eiche.
+- Ein **Kalibrierblatt** entwerfen: 32×32-px-Bodentile für 1×1 m Weltfläche, Erwachsene in 32×32-px-Rahmen, 20×20 sichtbare Kinderfigur als optionale Studie, Lagerfeuer, junges Gehölz, große Eiche.
 - Erst einen **Stil-Pilot** mit Gras, Waldboden, Wasser, einem Baum, Feuer und einer Figur herstellen. Nicht das gesamte Set in einem einzigen Bild generieren.
 - Nach Freigabe Produktionsgruppen in kleinen, eindeutig prüfbaren Chargen erstellen.
 
