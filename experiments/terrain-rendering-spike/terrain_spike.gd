@@ -100,13 +100,28 @@ func _r7_depth(x: float,z: float) -> float:
     var d: float = Vector2(maxf(p.x,0.0),maxf(p.y,0.0)).length()+minf(maxf(p.x,p.y),0.0)-0.16
     return 1.1*(1.0-smoothstep(-0.35,0.17,d))
 
+# R7.2: one edge distance per mesh vertex, reused by geometry and shader.
+# Noise coefficients follow the existing R7.1 material path.
+func _path_hash(p: Vector2) -> float:
+    return fposmod(sin(p.dot(Vector2(127.1,311.7))+float(SEED))*43758.5453123,1.0)
+
+func _path_noise(p: Vector2) -> float:
+    var i := Vector2(floorf(p.x),floorf(p.y))
+    var f := p-i
+    f = f*f*(Vector2(3.0,3.0)-2.0*f)
+    return lerpf(lerpf(_path_hash(i),_path_hash(i+Vector2(1.0,0.0)),f.x),lerpf(_path_hash(i+Vector2(0.0,1.0)),_path_hash(i+Vector2(1.0,1.0)),f.x),f.y)
+
 func _path_edge_distance(x: float, z: float) -> float:
-    # World-coordinate signed distance, matching the material shader.
-    var center: float = 6.1 + 0.85*sin(x*0.42)
-    center += 0.40*(sin(x*0.55+1.7)*sin(x*0.31+0.6))
-    var half_width: float = 0.62 + 0.12*sin(x*0.75+2.1)
-    var jitter: float = 0.09*sin(x*2.2+z*1.7) + 0.035*sin(x*6.0-z*3.0)
-    return absf(z-center)-half_width+jitter
+    var p := Vector2(x,z)
+    var center: float = 6.1+0.85*sin(x*0.42)
+    center += 0.80*(_path_noise(Vector2(x*0.55,11.0))-0.5)
+    center += 0.40*(_path_noise(p*0.85+Vector2(6.0,17.0))-0.5)
+    var half_width: float = 0.62+0.48*(_path_noise(p*0.75+Vector2(34.0,12.0))-0.5)
+    var edge: float = absf(z-center)-half_width
+    edge += 0.30*(_path_noise(p*2.2+Vector2(7.0,3.0))-0.5)
+    edge += 0.10*(_path_noise(p*7.0+Vector2(4.0,23.0))-0.5)
+    edge += 0.035*(_path_hash(Vector2(floorf(x*32.0),floorf(z*32.0)))-0.5)
+    return edge
 
 func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
@@ -162,7 +177,7 @@ func _rebuild_mesh() -> void:
                 cut_depth = _r7_depth(px,pz)
             elif mode_id == 6 and case_id == 1:
                 cut_depth = 1.05*(1.0-smoothstep(1.25,2.20,Vector2(px-8.2,pz-8.0).length()))
-            colors.append(Color(_grass(px,pz),cut_depth,0,1))
+            colors.append(Color(_grass(px,pz),cut_depth,clampf((_path_edge_distance(px,pz)+2.0)/4.0,0.0,1.0) if mode_id == 9 else 0.0,1))
             var sx: float = _height(px+step_size,pz)-_height(px-step_size,pz)
             var sz: float = _height(px,pz+step_size)-_height(px,pz-step_size)
             normals.append(Vector3(-sx,2.0*step_size,-sz).normalized())

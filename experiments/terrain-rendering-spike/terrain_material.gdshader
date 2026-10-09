@@ -14,6 +14,7 @@ uniform int r71_debug_mode = 0;
 varying vec3 world_pos;
 varying float grass;
 varying float cut_depth;
+varying float shared_edge;
 
 float hash21(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7)) + seed) * 43758.5453123);
@@ -29,6 +30,7 @@ void vertex() {
     world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
     grass = COLOR.r;
     cut_depth = COLOR.g;
+    shared_edge = COLOR.b*4.0-2.0;
 }
 void fragment() {
     vec2 p = world_pos.xz;
@@ -54,14 +56,19 @@ void fragment() {
                           + 0.36*noise2(p*4.0+vec2(71.1,19.4));
         float grass_jitter = hash21(floor(p*8.0+vec2(2.0,7.0)))-0.5;
         vec3 turf = mix(turf_a,turf_b,step(0.50,grass_field+0.14*grass_jitter));
-        float center = 6.1+0.85*sin(p.x*0.42);
-        center += 0.40*(noise2(vec2(p.x*0.55,11.0))-0.5)*2.0;
-        center += 0.20*(noise2(p*0.85+vec2(6.0,17.0))-0.5)*2.0;
-        float half_width = 0.62+0.24*(noise2(p*0.75+vec2(34.0,12.0))-0.5)*2.0;
-        float signed_edge = abs(p.y-center)-half_width;
-        signed_edge += 0.15*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0;
-        signed_edge += 0.05*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
-        signed_edge += 0.035*(hash21(floor(p*32.0))-0.5);
+        // R7.2: interpolated from the same mesh vertices that define the sod lip.
+        // R7.1: keep the original independent shader noise for comparison.
+        float signed_edge = shared_edge;
+        if (render_mode_id == 8) {
+            float center = 6.1+0.85*sin(p.x*0.42);
+            center += 0.40*(noise2(vec2(p.x*0.55,11.0))-0.5)*2.0;
+            center += 0.20*(noise2(p*0.85+vec2(6.0,17.0))-0.5)*2.0;
+            float half_width = 0.62+0.24*(noise2(p*0.75+vec2(34.0,12.0))-0.5)*2.0;
+            signed_edge = abs(p.y-center)-half_width;
+            signed_edge += 0.15*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0;
+            signed_edge += 0.05*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
+            signed_edge += 0.035*(hash21(floor(p*32.0))-0.5);
+        }
         // Explicit world-space path-edge material zones.
         // Keep this mask in sync with the geometry edge in terrain_spike.gd.
         // Signed distance: negative = compacted path, positive = grass.
