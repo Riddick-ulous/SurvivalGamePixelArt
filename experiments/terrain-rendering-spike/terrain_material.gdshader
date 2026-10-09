@@ -10,7 +10,6 @@ uniform sampler2D grass_b_tex : source_color, filter_nearest, repeat_enable;
 uniform sampler2D soil_tex : source_color, filter_nearest, repeat_enable;
 uniform float material_meters = 8.0;
 uniform int r71_debug_mode = 0;
-uniform sampler2D path_edge_mask : filter_linear, repeat_disable;
 
 varying vec3 world_pos;
 varying float grass;
@@ -55,9 +54,14 @@ void fragment() {
                           + 0.36*noise2(p*4.0+vec2(71.1,19.4));
         float grass_jitter = hash21(floor(p*8.0+vec2(2.0,7.0)))-0.5;
         vec3 turf = mix(turf_a,turf_b,step(0.50,grass_field+0.14*grass_jitter));
-        // Sample the same world-space signed-distance field as the height mesh.
-        // Texel centers and linear filtering match CPU bilinear interpolation.
-        float signed_edge = texture(path_edge_mask,clamp(p/16.0,vec2(0.0),vec2(1.0))).r*4.0-2.0;
+        float center = 6.1+0.85*sin(p.x*0.42);
+        center += 0.40*(noise2(vec2(p.x*0.55,11.0))-0.5)*2.0;
+        center += 0.20*(noise2(p*0.85+vec2(6.0,17.0))-0.5)*2.0;
+        float half_width = 0.62+0.24*(noise2(p*0.75+vec2(34.0,12.0))-0.5)*2.0;
+        float signed_edge = abs(p.y-center)-half_width;
+        signed_edge += 0.15*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0;
+        signed_edge += 0.05*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
+        signed_edge += 0.035*(hash21(floor(p*32.0))-0.5);
         // Explicit world-space path-edge material zones.
         // Keep this mask in sync with the geometry edge in terrain_spike.gd.
         // Signed distance: negative = compacted path, positive = grass.

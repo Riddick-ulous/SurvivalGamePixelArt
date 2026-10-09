@@ -35,7 +35,6 @@ func _ready() -> void:
     _build_camera()
     _build_lighting()
     _build_reference_mesh()
-    _build_path_mask()
     _build_terrain()
     _build_decor()
     _build_r3_assets()
@@ -101,42 +100,13 @@ func _r7_depth(x: float,z: float) -> float:
     var d: float = Vector2(maxf(p.x,0.0),maxf(p.y,0.0)).length()+minf(maxf(p.x,p.y),0.0)-0.16
     return 1.1*(1.0-smoothstep(-0.35,0.17,d))
 
-# Shared signed-distance field: generated once, sampled by BOTH heightfield
-# and material shader. Values in meters; R channel stores (distance + 2) / 4.
-const PATH_MASK_SIZE := 512
-var path_mask_image: Image
-var path_mask_texture: ImageTexture
-
-func _path_edge_formula(x: float, z: float) -> float:
+func _path_edge_distance(x: float, z: float) -> float:
+    # World-coordinate signed distance, matching the material shader.
     var center: float = 6.1 + 0.85*sin(x*0.42)
-    center += 0.40*sin(x*0.55+1.7)*sin(x*0.31+0.6)
-    center += 0.20*sin(x*0.85+z*0.40+1.2)*sin(z*0.85-x*0.22)
+    center += 0.40*(sin(x*0.55+1.7)*sin(x*0.31+0.6))
     var half_width: float = 0.62 + 0.12*sin(x*0.75+2.1)
     var jitter: float = 0.09*sin(x*2.2+z*1.7) + 0.035*sin(x*6.0-z*3.0)
     return absf(z-center)-half_width+jitter
-
-func _build_path_mask() -> void:
-    path_mask_image = Image.create(PATH_MASK_SIZE,PATH_MASK_SIZE,false,Image.FORMAT_RF)
-    for iz in range(PATH_MASK_SIZE):
-        for ix in range(PATH_MASK_SIZE):
-            var x: float = (float(ix)+0.5)*EXTENT/float(PATH_MASK_SIZE)
-            var z: float = (float(iz)+0.5)*EXTENT/float(PATH_MASK_SIZE)
-            var encoded: float = clampf((_path_edge_formula(x,z)+2.0)/4.0,0.0,1.0)
-            path_mask_image.set_pixel(ix,iz,Color(encoded,0.0,0.0,1.0))
-    path_mask_texture = ImageTexture.create_from_image(path_mask_image)
-
-func _path_edge_distance(x: float, z: float) -> float:
-    var fx: float = clampf(x/EXTENT*float(PATH_MASK_SIZE)-0.5,0.0,float(PATH_MASK_SIZE-1))
-    var fz: float = clampf(z/EXTENT*float(PATH_MASK_SIZE)-0.5,0.0,float(PATH_MASK_SIZE-1))
-    var ix: int = int(floorf(fx))
-    var iz: int = int(floorf(fz))
-    var jx: int = mini(ix+1,PATH_MASK_SIZE-1)
-    var jz: int = mini(iz+1,PATH_MASK_SIZE-1)
-    var tx: float = fx-float(ix)
-    var tz: float = fz-float(iz)
-    var a: float = lerpf(path_mask_image.get_pixel(ix,iz).r,path_mask_image.get_pixel(jx,iz).r,tx)
-    var b: float = lerpf(path_mask_image.get_pixel(ix,jz).r,path_mask_image.get_pixel(jx,jz).r,tx)
-    return 4.0*lerpf(a,b,tz)-2.0
 
 func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
@@ -173,7 +143,6 @@ func _build_terrain() -> void:
     add_child(terrain_mesh)
     terrain_material = ShaderMaterial.new()
     terrain_material.shader = load("res://terrain_material.gdshader")
-    terrain_material.set_shader_parameter("path_edge_mask",path_mask_texture)
     terrain_mesh.material_override = terrain_material
 
 func _rebuild_mesh() -> void:
