@@ -108,7 +108,7 @@ func _rebuild_mesh() -> void:
     var grid: int = R7_GRID if mode_id == 7 else GRID
     var step_size: float = EXTENT/float(grid)
     for z in range(grid+1):
-        for x in range(GRID+1):
+        for x in range(grid+1):
             var px := float(x)*step_size
             var pz := float(z)*step_size
             verts.append(Vector3(px,_height(px,pz),pz))
@@ -122,7 +122,7 @@ func _rebuild_mesh() -> void:
             var sz: float = _height(px,pz+step_size)-_height(px,pz-step_size)
             normals.append(Vector3(-sx,2.0*step_size,-sz).normalized())
     for z in range(grid):
-        for x in range(GRID):
+        for x in range(grid):
             var a := z*(grid+1)+x
             var b := a+1
             var c := a+(grid+1)
