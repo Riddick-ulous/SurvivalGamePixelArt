@@ -77,7 +77,7 @@ darf weder Frist noch Prozessende oder Schadensschwelle unbemerkt überspringen.
 ## Raum
 
 `GridPosition(x,y,level)` und optionaler Feinoffset; Bildschirmkoordinaten separat.
-Ein logisches Rasterfeld zunächst 1 m × 1 m, Darstellung nominell 16 Pixel.
+Ein logisches Rasterfeld zunächst 1 m × 1 m, Darstellung nominell 32 Pixel (Grafikkonzept v0.3).
 Chunkkantenlänge als Konfiguration (Startvorschlag 32 Felder). Keine hart
 eingebaute maximale Regionengröße. Türen, Rampen und Treppen später explizite
 Verbindungen zwischen begehbaren Flächen; Höhe ist nicht nur Sprite-Versatz.
