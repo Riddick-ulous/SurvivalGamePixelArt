@@ -1,18 +1,7 @@
-# Freigegebene Stilreferenz v1.0 — Waldcamp
+# Aktuelle Art Direction — nur vollstaendige Szenen
 
-**Stand:** 2026-10-09. **Freigabe:** Stil und Gesamtwirkung der im Chat erzeugten Waldcamp-Konzeptstudie; keine Freigabe ihrer Einzelkacheln als Spielassets.
+Die vollstaendige, kohaerente Waldlichtung ist die visuelle Zielvorgabe: atmosphaerische, naturnahe Pixel Art in schraeger 2,5D-Draufsicht; mitteleuropaeische Gruen-, Moos- und Erdpalette; organische Pfade, Ufer und Gelaendewechsel; lesbare Figuren und Objekte. Kein Fantasy-Kitsch und keine gemalten quadratischen Weltkacheln.
 
-Diese beiden Original-PNGs sind die alleinigen **führenden** Stilreferenzen:
+**Transferstatus:** Die zwei bisher freigegebenen vollstaendigen Waldcamp-PNGs waren bereits vor diesem Branch als 'Binaeruebertragung offen' dokumentiert. Auf diesem Branch wurde keine nicht nachgewiesene Datei als vorhanden ausgegeben. Die originale vollstaendige Landschaft aus der aktuellen Unterhaltung soll unter `game/assets/style_reference/current/forest_ground_reference_1024.png` unveraendert als neue Testreferenz hinzugefuegt werden, sobald die binaere Uebertragung ueber ein geeignetes Medium erfolgt. Keine Tileset-Illustration und kein zugeschnittenes Kachelblatt als Ersatz einsetzen.
 
-| Zieldatei | SHA-256 der freigegebenen Originaldatei | Status |
-| --- | --- | --- |
-| `waldcamp_concept_board_v1.png` | `17239b5c53c1a0fcb9c6ad8fc2bc2be866ec9dbddf8fd816959be76386cc8ee6` | **Binärübertragung noch offen** |
-| `waldcamp_scene_v1.png` | `c1840a65c7e73a5159469104beed8d60313d3c8110926f7e661086b225497eca` | **Binärübertragung noch offen** |
-
-Die Originale liegen als gesichertes Bundle `Waldcamp_Style_Reference_Approved_v1.zip` beim Auftraggeber/ChatGPT-Artefakt bereit. **Nicht** behaupten, die Dateien seien bereits in diesem Git-Verzeichnis vorhanden. Vollständiger Wechsel auf einen Git-eigenen Masterstatus erst nach binärer Übertragung und SHA-256-Prüfung beider Dateien.
-
-**Stil:** Natürliche, feingliedrige Pixel-Art für Wald/Lichtung/Wasser; von der Simulation ablesbare Objekte und Menschen; schräge RPG-Draufsicht mit vollständigen Figuren. 32 Pixel/meter gilt für **neu zu erzeugende echte Assets**, nicht nachträglich für die rein illustrativen Masterbilder.
-
-Der vorherige Satz `prototype_01` befindet sich ausschließlich unter `style_reference/archive/prototype_01`; er ist nicht mehr als aktive Stilvorlage zu verwenden. Das native 32-px-Kalibrierset ist separat als **technische Probe, unfreigegeben** unter `game/assets/calibration/forest_camp_v01`.
-
-Für Assetproduktion und Abnahmen: [Grafikkonzept](../../../../docs/design/graphics-concept-v0.3.md), [Workflow](../../../../docs/design/asset-generation-workflow-v0.1.md), [Assetliste](../../../../docs/design/forest-camp-asset-list-v0.1.md).
+Referenz ist **Art Direction**, kein Tileatlas und kein Beweis fuer Seamlessness oder korrekte Hoehenprojektion. Siehe `docs/design/terrain-rendering-spike-v0.1.md` und `docs/decisions/0003-hybrid-terrain-renderer.md`.
