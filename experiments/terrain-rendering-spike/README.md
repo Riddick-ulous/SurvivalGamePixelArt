@@ -1,0 +1,20 @@
+# R0–R2 Heightfield-Rendering-Spike (Godot 4)
+
+**Implemented as source code; visual quality not yet validated.** Standalone Godot 4 GDScript experiment; no .NET or C# required for this throwaway rendering comparison. Launch with Godot 4.3+ (project.godot). CLI example: `godot --path experiments/terrain-rendering-spike --editor` then F6/main scene or `godot --path experiments/terrain-rendering-spike`.
+
+Controls: **1/2/3** choose R0/R1/R2; **A/B/C** natural / excavation / mound; **Q/W/E** 35/45/55 degree camera; **S** save screenshot to Godot user-data directory (absolute path printed to console). Fixed seed 1909, 16x16 m, 65x65 vertex heightfield, shared world-space material coordinates.
+
+R0 = flat diagnostic materials. R1 = continuous multiscale noise material with blended grass/soil. R2 = quantized world-space clusters and discrete palette. Decor = deterministic simple debug cylinders, **not finished foliage sprites**. This prototype uses no extracted image textures, so it tests the procedural-material hypothesis rather than proving that the approved reference look can be matched.
+
+**Required evaluation:** compare 9 cases (3 render modes x 3 terrain states) at same camera; check geometry, boundary continuity, pixel discipline, texture stretching, and artistic quality against the full scene reference. The material values are provisional and deliberately avoid claims of artistic acceptance. To use original reference imagery as source texture later, isolate a clean ground region and document cropping/rights; never use a complete forest scene as a repeating texture.
+
+**Limitations:** 65x65 vertices with per-vertex material weights can show some polygon interpolation at boundaries; R2 cluster size changes with world scale rather than output pixel size; unshaded materials omit cast shadows, so slopes are visible by silhouettes and geometry rather than physically correct light. This is a minimum diagnostic, not final pixel-art rendering. No groundwater, underground, water or simulation.
+
+Validation checklist:
+- [ ] Godot parser and scene load tested in installed Godot version
+- [ ] R0 geometry and A/B/C screenshots reviewed
+- [ ] R1 material continuity and world anchoring reviewed
+- [ ] R2 clusters at native and 4x nearest reviewed
+- [ ] Reference comparison reviewed; Go/No-Go documented
+
+No completed test boxes are implied by committing the files.
