@@ -37,8 +37,8 @@ func _position_camera() -> void:
     camera.look_at(Vector3(8.0,0.0,8.0),Vector3.UP)
 
 func _height(x: float,z: float) -> float:
-    var h := 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
-    var d := Vector2(x-8.2,z-8.0).length()
+    var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
+    var d: float = Vector2(x-8.2,z-8.0).length()
     if case_id == 1:
         h -= 0.72*(1.0-smoothstep(1.0,2.25,d))
     elif case_id == 2:
@@ -46,8 +46,8 @@ func _height(x: float,z: float) -> float:
     return h
 
 func _grass(x: float,z: float) -> float:
-    var path_dist := abs(z-6.1-0.85*sin(x*0.42))
-    var noise := 0.12*sin(x*2.1+z*0.8)+0.10*sin(z*3.0-x*1.2)
+    var path_dist: float = absf(z-6.1-0.85*sin(x*0.42))
+    var noise: float = 0.12*sin(x*2.1+z*0.8)+0.10*sin(z*3.0-x*1.2)
     return clamp((path_dist-0.62+noise)*1.9+0.50,0.0,1.0)
 
 func _build_terrain() -> void:
