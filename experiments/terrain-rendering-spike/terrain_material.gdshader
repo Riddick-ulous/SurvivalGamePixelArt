@@ -9,6 +9,7 @@ uniform sampler2D grass_a_tex : source_color, filter_nearest, repeat_enable;
 uniform sampler2D grass_b_tex : source_color, filter_nearest, repeat_enable;
 uniform sampler2D soil_tex : source_color, filter_nearest, repeat_enable;
 uniform float material_meters = 8.0;
+uniform int r71_debug_mode = 0;
 
 varying vec3 world_pos;
 varying float grass;
@@ -43,6 +44,51 @@ void fragment() {
         vec3 turf = mix(vec3(0.16,0.29,0.12),vec3(0.46,0.55,0.24),0.6*large+0.4*medium);
         float blend = smoothstep(0.26,0.74,g+0.14*(medium-0.5));
         ALBEDO = mix(earth,turf,blend)*(0.90+0.20*fine);
+    } else if (render_mode_id == 8) {
+        // R7.1: same terrain and grass mix as R7, but consistent
+        // meters-per-repeat on all projection axes.
+        vec2 uv = fract(p/material_meters);
+        vec3 turf_a = texture(grass_a_tex,uv).rgb;
+        vec3 turf_b = texture(grass_b_tex,uv).rgb;
+        float grass_field = 0.64*noise2(p*1.55+vec2(13.7,8.2))
+                          + 0.36*noise2(p*4.0+vec2(71.1,19.4));
+        float grass_jitter = hash21(floor(p*8.0+vec2(2.0,7.0)))-0.5;
+        vec3 turf = mix(turf_a,turf_b,step(0.50,grass_field+0.14*grass_jitter));
+        float center = 6.1+0.85*sin(p.x*0.42);
+        center += 0.40*(noise2(vec2(p.x*0.55,11.0))-0.5)*2.0;
+        center += 0.20*(noise2(p*0.85+vec2(6.0,17.0))-0.5)*2.0;
+        float half_width = 0.62+0.24*(noise2(p*0.75+vec2(34.0,12.0))-0.5)*2.0;
+        float signed_edge = abs(p.y-center)-half_width;
+        signed_edge += 0.15*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0;
+        signed_edge += 0.05*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
+        signed_edge += 0.035*(hash21(floor(p*32.0))-0.5);
+        float turf_coverage = step(0.0,signed_edge)*(1.0-step(0.11,cut_depth));
+        float lip = turf_coverage*(1.0-step(0.13,signed_edge));
+        // Geometry normals from the mesh (view-space NORMAL) are transformed
+        // to world-space, avoiding screen-derivative sign ambiguity.
+        vec3 normal_world = normalize((INV_VIEW_MATRIX*vec4(NORMAL,0.0)).xyz);
+        vec3 weights = abs(normal_world);
+        vec3 earth = texture(soil_tex,uv).rgb;
+        vec3 side_x = texture(soil_tex,fract(world_pos.zy/material_meters)).rgb;
+        vec3 side_z = texture(soil_tex,fract(world_pos.xy/material_meters)).rgb;
+        if (weights.y < max(weights.x,weights.z)) {
+            earth = weights.x > weights.z ? side_x : side_z;
+        }
+        ALBEDO = mix(earth,turf,turf_coverage);
+        ALBEDO = mix(ALBEDO,turf*vec3(0.63,0.76,0.53),lip*0.65);
+        ROUGHNESS = 1.0;
+        if (r71_debug_mode == 1) {
+            // Unlit material diagnostic, independent of all light sources.
+            EMISSION = ALBEDO;
+            ALBEDO = vec3(0.0);
+        } else if (r71_debug_mode == 2) {
+            // World-space normals encoded as RGB.
+            EMISSION = normal_world*0.5+0.5;
+            ALBEDO = vec3(0.0);
+        } else if (r71_debug_mode == 3) {
+            // Pure white terrain under the actual scene lighting.
+            ALBEDO = vec3(1.0);
+        }
     } else if (render_mode_id == 7) {
         // R7: retain R5 grass A/B selection, add an explicit path-edge lip.
         vec2 uv = fract(p/material_meters);
@@ -191,7 +237,7 @@ void fragment() {
         ALBEDO = mix(color,vec3(0.55,0.58,0.29),sprig*step(0.65,hash21(cell)));
     }
     // Keep R0-R6 visually unlit for direct comparison with R7.
-    if (render_mode_id != 7) {
+    if (render_mode_id < 7) {
         EMISSION = ALBEDO;
         ALBEDO = vec3(0.0);
     }

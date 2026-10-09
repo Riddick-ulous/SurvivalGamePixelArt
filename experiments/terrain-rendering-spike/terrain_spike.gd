@@ -5,7 +5,7 @@ const R7_GRID := 128
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -20,11 +20,17 @@ var r3_overlay: Texture2D
 var r4_ready: bool = false
 var close_camera: bool = false
 var r6_debug: bool = false
+var lighting_debug_mode: int = 0
+var shadow_test: bool = false
+var sun_direction_id: int = 0
+var r71_sun: DirectionalLight3D
+var reference_mesh: MeshInstance3D
 
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
     _build_camera()
     _build_lighting()
+    _build_reference_mesh()
     _build_terrain()
     _build_decor()
     _build_r3_assets()
@@ -49,9 +55,9 @@ func _position_camera() -> void:
 func _build_lighting() -> void:
     var sun := DirectionalLight3D.new()
     sun.name = "R7_Sun"
-    sun.rotation_degrees = Vector3(-52.0,-38.0,0.0)
-    sun.light_energy = 1.25
-    sun.shadow_enabled = true
+    sun.rotation_degrees = Vector3(-60.0,-45.0,0.0)
+    sun.light_energy = 1.8
+    sun.shadow_enabled = false
     add_child(sun)
     var environment := WorldEnvironment.new()
     var settings := Environment.new()
@@ -59,10 +65,27 @@ func _build_lighting() -> void:
     settings.background_color = Color(0.13,0.17,0.18)
     settings.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
     settings.ambient_light_color = Color(0.75,0.80,0.83)
-    settings.ambient_light_energy = 0.48
+    settings.ambient_light_energy = 0.8
     environment.environment = settings
     add_child(environment)
     sun.visible = false
+    r71_sun = sun
+
+func _build_reference_mesh() -> void:
+    # Neutral reference: if this cube reacts to light, the scene light works.
+    reference_mesh = MeshInstance3D.new()
+    reference_mesh.name = "R71_White_Light_Reference"
+    var cube := BoxMesh.new()
+    cube.size = Vector3(0.8,0.8,0.8)
+    reference_mesh.mesh = cube
+    var white := StandardMaterial3D.new()
+    white.albedo_color = Color.WHITE
+    white.roughness = 1.0
+    white.metallic = 0.0
+    reference_mesh.material_override = white
+    reference_mesh.position = Vector3(7.0,0.6,7.0)
+    reference_mesh.visible = false
+    add_child(reference_mesh)
 
 func _r7_depth(x: float,z: float) -> float:
     var dx: float = x-8.2
@@ -76,7 +99,7 @@ func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
     var d: float = Vector2(x-8.2,z-8.0).length()
     if case_id == 1:
-        if mode_id == 7:
+        if mode_id >= 7:
             h -= _r7_depth(x,z)
         elif mode_id == 6:
             # Flatter excavated floor with steeper but resolvable banks.
@@ -105,7 +128,7 @@ func _rebuild_mesh() -> void:
     var colors := PackedColorArray()
     var indices := PackedInt32Array()
     var normals := PackedVector3Array()
-    var grid: int = R7_GRID if mode_id == 7 else GRID
+    var grid: int = R7_GRID if mode_id >= 7 else GRID
     var step_size: float = EXTENT/float(grid)
     for z in range(grid+1):
         for x in range(grid+1):
@@ -113,7 +136,7 @@ func _rebuild_mesh() -> void:
             var pz := float(z)*step_size
             verts.append(Vector3(px,_height(px,pz),pz))
             var cut_depth: float = 0.0
-            if mode_id == 7 and case_id == 1:
+            if mode_id >= 7 and case_id == 1:
                 cut_depth = _r7_depth(px,pz)
             elif mode_id == 6 and case_id == 1:
                 cut_depth = 1.05*(1.0-smoothstep(1.25,2.20,Vector2(px-8.2,pz-8.0).length()))
@@ -181,7 +204,11 @@ func _update_scene() -> void:
         push_warning("Image materials missing in res://materials/")
     _rebuild_mesh()
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
-    get_node("R7_Sun").visible = mode_id == 7
+    r71_sun.visible = mode_id >= 7
+    r71_sun.shadow_enabled = shadow_test if mode_id == 8 else true
+    r71_sun.rotation_degrees = Vector3(-60.0,-45.0,0.0) if sun_direction_id == 0 else Vector3(-48.0,125.0,0.0)
+    reference_mesh.visible = mode_id == 8
+    terrain_material.set_shader_parameter("r71_debug_mode",lighting_debug_mode if mode_id == 8 else 0)
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
@@ -191,7 +218,7 @@ func _update_scene() -> void:
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
-    info.text = "%s | %s | pitch %.0f° | %s\n1-8: R0-R7   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: toggle zoom   S: screenshot\nR4-R7 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
+    info.text = "%s | %s | pitch %.0f° | %s\n1-9: R0-R7.1   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7.1: L debug   H shadows   J sun direction\nR4-R7 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -205,6 +232,11 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_6: mode_id = 5
         KEY_7: mode_id = 6
         KEY_8: mode_id = 7
+        KEY_9: mode_id = 8
+        KEY_L:
+            lighting_debug_mode = (lighting_debug_mode+1)%4
+        KEY_H: shadow_test = not shadow_test
+        KEY_J: sun_direction_id = (sun_direction_id+1)%2
         KEY_Z: close_camera = not close_camera
         KEY_A: case_id = 0
         KEY_B: case_id = 1
