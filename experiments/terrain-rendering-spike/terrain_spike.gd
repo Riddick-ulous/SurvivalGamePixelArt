@@ -4,7 +4,7 @@ const GRID := 64
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -14,12 +14,15 @@ var camera: Camera3D
 var info: Label
 var decor_root: Node3D
 var pitch := 45.0
+var r3_atlas: Texture2D
+var r3_overlay: Texture2D
 
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
     _build_camera()
     _build_terrain()
     _build_decor()
+    _build_r3_assets()
     _build_ui()
     _update_scene()
 
@@ -126,11 +129,13 @@ func _update_scene() -> void:
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
+    terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
+    decor_root.visible = mode_id == 3
     for item in decor_root.get_children():
         var x: float = item.get_meta("ground_x")
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
-    info.text = "%s | %s | pitch %.0f°\n1/2/3: R0/R1/R2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   S: save screenshot\nProcedural materials, not reference-derived assets" % [MODES[mode_id],CASES[case_id],pitch]
+    info.text = "%s | %s | pitch %.0f°\n1/2/3/4: R0/R1/R2/R3   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   S: save screenshot\nProcedural materials, not reference-derived assets" % [MODES[mode_id],CASES[case_id],pitch]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -139,6 +144,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_1: mode_id = 0
         KEY_2: mode_id = 1
         KEY_3: mode_id = 2
+        KEY_4: mode_id = 3
         KEY_A: case_id = 0
         KEY_B: case_id = 1
         KEY_C: case_id = 2
@@ -160,3 +166,62 @@ func _capture() -> void:
     var path := "user://" + name
     var err := img.save_png(path)
     print("Screenshot: ",ProjectSettings.globalize_path(path)," error=",err)
+
+# R3 assets: deterministic, genuinely transparent pixel clusters. Generated in
+# code, not claimed to be AI-extracted artwork. Textures wrap by construction.
+func _build_r3_assets() -> void:
+    var atlas := Image.create(256,128,false,Image.FORMAT_RGBA8)
+    var rng := RandomNumberGenerator.new()
+    rng.seed = 20261009
+    for y in range(128):
+        for x in range(256):
+            var grass_side := x < 128
+            var n := rng.randf()
+            var base := Color(0.20,0.31,0.13) if grass_side else Color(0.34,0.23,0.15)
+            var t := floorf(n*5.0)/5.0-0.4
+            var color := base+Color(t*0.18,t*0.15,t*0.08,0.0)
+            atlas.set_pixel(x,y,color)
+    # Wrap-aware painted clusters: no discontinuity at texture edges.
+    for grass_side in [true,false]:
+        var ox := 0 if grass_side else 128
+        for i in range(850):
+            var px := rng.randi_range(0,127)
+            var py := rng.randi_range(0,127)
+            var length := rng.randi_range(1,5)
+            var color := Color(0.39,0.48,0.20) if grass_side else Color(0.48,0.33,0.20)
+            if rng.randf() < 0.32:
+                color = Color(0.12,0.23,0.10) if grass_side else Color(0.20,0.13,0.09)
+            for dy in range(length):
+                for dx in range(rng.randi_range(1,3)):
+                    atlas.set_pixel(ox+posmod(px+dx,128),posmod(py+dy,128),color)
+    r3_atlas = ImageTexture.create_from_image(atlas)
+    # Alpha overlay, pixel-sized plant sprite; no black background.
+    var plant := Image.create(32,32,false,Image.FORMAT_RGBA8)
+    plant.fill(Color(0,0,0,0))
+    for i in range(11):
+        var sx := rng.randi_range(5,26)
+        var sy := rng.randi_range(8,25)
+        var color := Color(0.29,0.49,0.17,1.0) if i%3 != 0 else Color(0.49,0.60,0.24,1.0)
+        for d in range(5):
+            var yy := sy-d
+            var xx := sx+int(round(sin(float(d+i)*0.9)*2.0))
+            if yy >= 0 and yy < 32:
+                plant.set_pixel(xx,yy,color)
+    r3_overlay = ImageTexture.create_from_image(plant)
+    for child in decor_root.get_children():
+        child.queue_free()
+    for i in range(42):
+        var x := rng.randf_range(0.3,15.7)
+        var z := rng.randf_range(0.3,15.7)
+        if _grass(x,z) < 0.55:
+            continue
+        var sprite := Sprite3D.new()
+        sprite.texture = r3_overlay
+        sprite.pixel_size = 0.012
+        sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+        sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
+        sprite.no_depth_test = false
+        sprite.position = Vector3(x,_height(x,z)+0.17,z)
+        sprite.set_meta("ground_x",x)
+        sprite.set_meta("ground_z",z)
+        decor_root.add_child(sprite)

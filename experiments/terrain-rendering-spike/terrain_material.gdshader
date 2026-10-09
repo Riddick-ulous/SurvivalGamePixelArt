@@ -4,6 +4,7 @@ render_mode unshaded, cull_disabled, depth_draw_opaque;
 uniform int render_mode_id = 0;
 uniform float world_scale = 32.0;
 uniform float seed = 19.0;
+uniform sampler2D r3_atlas : source_color, filter_nearest, repeat_enable;
 
 varying vec3 world_pos;
 varying float grass;
@@ -36,6 +37,14 @@ void fragment() {
         vec3 turf = mix(vec3(0.16,0.29,0.12),vec3(0.46,0.55,0.24),0.6*large+0.4*medium);
         float blend = smoothstep(0.26,0.74,g+0.14*(medium-0.5));
         ALBEDO = mix(earth,turf,blend)*(0.90+0.20*fine);
+    } else if (render_mode_id == 3) {
+        // R3: 2 hand-structured procedural atlases, repeated in world coordinates.
+        // Texture atlas: grass left half, soil right half.
+        vec2 uv = fract(p*0.48);
+        float edge = noise2(p*2.0);
+        float blend = step(0.48,g+0.13*(edge-0.5));
+        vec2 atlas_uv = vec2(uv.x*0.5 + (1.0-blend)*0.5,uv.y);
+        ALBEDO = texture(r3_atlas,atlas_uv).rgb;
     } else {
         // R2: explicit world-anchored pixel clusters and quantized palette.
         // These are PROCEDURAL placeholders, not extracted reference pixels.
