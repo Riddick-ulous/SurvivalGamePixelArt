@@ -4,7 +4,7 @@ const GRID := 64
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -17,6 +17,7 @@ var pitch := 45.0
 var r3_atlas: Texture2D
 var r3_overlay: Texture2D
 var r4_ready: bool = false
+var close_camera: bool = false
 
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
@@ -38,6 +39,7 @@ func _build_camera() -> void:
 
 func _position_camera() -> void:
     var angle := deg_to_rad(pitch)
+    camera.size = 5.7 if close_camera else 23.0
     camera.position = Vector3(8.0, 18.0*sin(angle), 8.0+18.0*cos(angle))
     camera.look_at(Vector3(8.0,0.0,8.0),Vector3.UP)
 
@@ -132,7 +134,7 @@ func _update_scene() -> void:
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
-    if mode_id == 4 and not r4_ready:
+    if mode_id >= 4 and not r4_ready:
         mode_id = 3
         push_warning("R4 PNGs missing. Copy grass_a_256.png, grass_b_256.png, soil_256.png to res://materials/")
     decor_root.visible = mode_id == 3
@@ -140,7 +142,8 @@ func _update_scene() -> void:
         var x: float = item.get_meta("ground_x")
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
-    info.text = "%s | %s | pitch %.0f°\n1/2/3/4/5: R0/R1/R2/R3/R4   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   S: save screenshot\nProcedural materials, not reference-derived assets" % [MODES[mode_id],CASES[case_id],pitch]
+    var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
+    info.text = "%s | %s | pitch %.0f° | %s\n1-6: R0-R5   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: toggle zoom   S: screenshot\nR4/R5 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -151,6 +154,8 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_3: mode_id = 2
         KEY_4: mode_id = 3
         KEY_5: mode_id = 4
+        KEY_6: mode_id = 5
+        KEY_Z: close_camera = not close_camera
         KEY_A: case_id = 0
         KEY_B: case_id = 1
         KEY_C: case_id = 2
@@ -168,7 +173,8 @@ func _capture() -> void:
     # Capture after one completed frame; user:// is writable on all platforms.
     await RenderingServer.frame_post_draw
     var img := get_viewport().get_texture().get_image()
-    var name := "terrain_%s_%s_%02d.png" % [MODES[mode_id].substr(0,2),CASES[case_id].substr(0,1),int(pitch)]
+    var zoom_label: String = "close" if close_camera else "wide"
+    var name := "terrain_%s_%s_%02d_%s.png" % [MODES[mode_id].substr(0,2),CASES[case_id].substr(0,1),int(pitch),zoom_label]
     var path := "user://" + name
     var err := img.save_png(path)
     print("Screenshot: ",ProjectSettings.globalize_path(path)," error=",err)

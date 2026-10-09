@@ -41,6 +41,34 @@ void fragment() {
         vec3 turf = mix(vec3(0.16,0.29,0.12),vec3(0.46,0.55,0.24),0.6*large+0.4*medium);
         float blend = smoothstep(0.26,0.74,g+0.14*(medium-0.5));
         ALBEDO = mix(earth,turf,blend)*(0.90+0.20*fine);
+    } else if (render_mode_id == 5) {
+        // R5: world-anchored stochastic material selection.
+        // No RGB interpolation between different texture materials.
+        // All material samples use the same UVs, so micro-pixel structure
+        // remains sharp; cluster boundaries are stochastic and repeatable.
+        vec2 uv = fract(p / material_meters);
+        vec3 turf_a = texture(grass_a_tex,uv).rgb;
+        vec3 turf_b = texture(grass_b_tex,uv).rgb;
+        vec3 earth = texture(soil_tex,uv).rgb;
+
+        // Grass variants: correlated coarse patches (~0.65m) plus irregular
+        // noise at 0.25m. This avoids hard 8m checkerboard switching.
+        float grass_field = 0.64*noise2(p*1.55+vec2(13.7,8.2))
+                          + 0.36*noise2(p*4.0+vec2(71.1,19.4));
+        float grass_jitter = hash21(floor(p*8.0+vec2(2.0,7.0))) - 0.5;
+        float grass_pick = step(0.50, grass_field+0.14*grass_jitter);
+        vec3 turf = mix(turf_a,turf_b,grass_pick);
+
+        // Transition width follows the existing world-material mask.
+        // Multi-scale excursions, islands and quantized pixel jitter
+        // replace the thin R4 noise-only edge. Avoid smoothstep color blend.
+        float organic = 0.58*(noise2(p*1.15+vec2(23.0,47.0))-0.5)
+                      + 0.28*(noise2(p*3.4+vec2(5.0,11.0))-0.5)
+                      + 0.14*(noise2(p*9.0+vec2(41.0,3.0))-0.5);
+        float pixel_jitter = hash21(floor(p*32.0+vec2(97.0,31.0)))-0.5;
+        float coverage = g + 0.66*organic + 0.12*pixel_jitter;
+        float grass_pick_final = step(0.5,coverage);
+        ALBEDO = mix(earth,turf,grass_pick_final);
     } else if (render_mode_id == 4) {
         // R4: real generated material PNGs, world-space 8m per image.
         // Alternating grass sources per 8m macro cell; intentionally simple
