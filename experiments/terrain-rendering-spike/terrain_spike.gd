@@ -5,7 +5,7 @@ const R7_GRID := 128
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug", "R7.2 normal correction"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug", "R7.2 grass edge geometry"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -100,9 +100,26 @@ func _r7_depth(x: float,z: float) -> float:
     var d: float = Vector2(maxf(p.x,0.0),maxf(p.y,0.0)).length()+minf(maxf(p.x,p.y),0.0)-0.16
     return 1.1*(1.0-smoothstep(-0.35,0.17,d))
 
+func _path_edge_distance(x: float, z: float) -> float:
+    # World-coordinate signed distance, matching the material shader.
+    var center: float = 6.1 + 0.85*sin(x*0.42)
+    center += 0.40*(sin(x*0.55+1.7)*sin(x*0.31+0.6))
+    var half_width: float = 0.62 + 0.12*sin(x*0.75+2.1)
+    var jitter: float = 0.09*sin(x*2.2+z*1.7) + 0.035*sin(x*6.0-z*3.0)
+    return absf(z-center)-half_width+jitter
+
 func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
     var d: float = Vector2(x-8.2,z-8.0).length()
+    if mode_id == 9:
+        # A shallow, physically raised grass sod at the compacted path edge.
+        # World-space, independent of terrain tessellation and texture scale.
+        var edge: float = _path_edge_distance(x,z)
+        var turf_step: float = smoothstep(-0.055,0.11,edge)
+        var broad_lip: float = 1.0-smoothstep(0.11,0.32,edge)
+        h += 0.065*turf_step*broad_lip
+        # Path is slightly worn down; no change to the excavation logic.
+        h -= 0.035*(1.0-smoothstep(-0.22,0.06,edge))
     if case_id == 1:
         if mode_id >= 7:
             h -= _r7_depth(x,z)

@@ -62,13 +62,13 @@ void fragment() {
         signed_edge += 0.15*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0;
         signed_edge += 0.05*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
         signed_edge += 0.035*(hash21(floor(p*32.0))-0.5);
-        // Explicit world-space path-edge material zones.
+        // Explicit world-space path-edge material zones.\n        // Keep this mask in sync with the geometry edge in terrain_spike.gd.
         // Signed distance: negative = compacted path, positive = grass.
         // A narrow exposed-earth strip precedes the darker turf root edge.
         float exposed = step(0.11,cut_depth);
         float turf_coverage = step(0.0,signed_edge)*(1.0-exposed);
         float rim_soil = (1.0-step(0.0,signed_edge))*step(-0.115,signed_edge);
-        float root_edge = turf_coverage*(1.0-step(0.105,signed_edge));
+        float root_edge = turf_coverage*(1.0-step(0.105,signed_edge));\n        float sod_face = (1.0-step(0.0,signed_edge))*step(-0.065,signed_edge);
         // Sparse coarse clumps grow across the edge, but only locally.
         float clump_noise = noise2(p*5.5+vec2(24.0,41.0));
         float tuft = step(0.67,clump_noise)*step(-0.085,signed_edge)* (1.0-step(0.05,signed_edge))*(1.0-exposed);
@@ -87,7 +87,7 @@ void fragment() {
         vec3 path_rim = earth*vec3(0.72,0.77,0.68);
         vec3 root_turf = turf*vec3(0.57,0.68,0.47);
         ALBEDO = mix(earth,turf,turf_coverage);
-        ALBEDO = mix(ALBEDO,path_rim,rim_soil*0.75);
+        ALBEDO = mix(ALBEDO,path_rim,rim_soil*0.75);\n        ALBEDO = mix(ALBEDO,earth*vec3(0.50,0.57,0.43),sod_face*0.60);
         ALBEDO = mix(ALBEDO,root_turf,root_edge*0.85);
         ALBEDO = mix(ALBEDO,earth*vec3(0.80,0.85,0.72),broken_edge*0.80);
         ALBEDO = mix(ALBEDO,turf*vec3(0.85,0.97,0.70),tuft*0.72);
