@@ -5,7 +5,7 @@ const R7_GRID := 128
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain", "R7 lit square pit", "R7.1 light debug", "R7.2 normal correction"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -150,7 +150,10 @@ func _rebuild_mesh() -> void:
             var b := a+1
             var c := a+(grid+1)
             var d := c+1
-            indices.append_array(PackedInt32Array([a,c,b,b,c,d]))
+            indices.append_array(PackedInt32Array([a,b,c,b,d,c]))
+    assert(verts.size() == (grid+1)*(grid+1))
+    assert(normals.size() == verts.size())
+    assert(indices.size() == grid*grid*6)
     var arrays := []
     arrays.resize(Mesh.ARRAY_MAX)
     arrays[Mesh.ARRAY_VERTEX] = verts
@@ -205,10 +208,10 @@ func _update_scene() -> void:
     _rebuild_mesh()
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
     r71_sun.visible = mode_id >= 7
-    r71_sun.shadow_enabled = shadow_test if mode_id == 8 else true
+    r71_sun.shadow_enabled = shadow_test if mode_id >= 8 else true
     r71_sun.rotation_degrees = Vector3(-60.0,-45.0,0.0) if sun_direction_id == 0 else Vector3(-48.0,125.0,0.0)
-    reference_mesh.visible = mode_id == 8
-    terrain_material.set_shader_parameter("r71_debug_mode",lighting_debug_mode if mode_id == 8 else 0)
+    reference_mesh.visible = mode_id >= 8
+    terrain_material.set_shader_parameter("r71_debug_mode",lighting_debug_mode if mode_id >= 8 else 0)
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
@@ -218,7 +221,7 @@ func _update_scene() -> void:
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
-    info.text = "%s | %s | pitch %.0f° | %s\n1-9: R0-R7.1   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7.1: L debug   H shadows   J sun direction\nR4-R7 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
+    info.text = "%s | %s | pitch %.0f° | %s\n1-0: R0-R7.2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7.1: L debug   H shadows   J sun direction\nR4-R7 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -233,6 +236,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_7: mode_id = 6
         KEY_8: mode_id = 7
         KEY_9: mode_id = 8
+        KEY_0: mode_id = 9
         KEY_L:
             lighting_debug_mode = (lighting_debug_mode+1)%4
         KEY_H: shadow_test = not shadow_test

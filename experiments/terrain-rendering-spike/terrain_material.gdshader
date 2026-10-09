@@ -44,7 +44,7 @@ void fragment() {
         vec3 turf = mix(vec3(0.16,0.29,0.12),vec3(0.46,0.55,0.24),0.6*large+0.4*medium);
         float blend = smoothstep(0.26,0.74,g+0.14*(medium-0.5));
         ALBEDO = mix(earth,turf,blend)*(0.90+0.20*fine);
-    } else if (render_mode_id == 8) {
+    } else if (render_mode_id == 8 || render_mode_id == 9) {
         // R7.1: same terrain and grass mix as R7, but consistent
         // meters-per-repeat on all projection axes.
         vec2 uv = fract(p/material_meters);
