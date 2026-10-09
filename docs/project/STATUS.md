@@ -1,26 +1,17 @@
-# Implementierungsstand
+# Implementierungsstand — 2026-10-09
 
-Stand: 2026-10-09. **Design- und Datenbasis; noch kein Spiel.**
+**Branch:** experiment/heightfield-pixelart-renderer. Design-/Datenbasis, keine lauffaehige Welt oder fertige 2,5D-Grafik.
 
-| Bereich | Stand | Nachweis / nächster Schritt |
+| Bereich | Stand | Nachweis / naechster Schritt |
 |---|---|---|
-| Ursprüngliches Spielkonzept | übernommen | docs/game-concept-v02.md |
-| Technische Architektur | spezifiziert | docs/architecture/technical-design.md |
-| Rezepte, Items, Workflows, Pflanzen | definiert | content/core; Validatorausgabe |
-| Schemata / Inhaltsprüfer | implementiert | tools/validate_content.py |
-| Prüfer-Regressionstests | implementiert | tests/content/test_validator.py |
-| Git | GitHub-Repository mit Initialstand und Konzeptgrafiken | Git-Historie; Grafikprototyp 01 |
-| Godot-/C#-Projekt | offen | T01 |
-| Inventar, Eigentum, Reservierung | spezifiziert | T03 |
-| Produktionslaufzeit | spezifiziert | T04 |
-| Survival und autonome Figuren | Zielbild | T05 |
-| UI, Grafik, Audio | Laufzeitdarstellung offen | T06 | 
-| Grafikprototyp 01 | 9 originale Konzept-PNGs abgelegt; nicht engineintegriert | `game/assets/concept_art/prototype_01/README.md` |
-| Speichern/Laden | spezifiziert | T07 |
-| Entfernte Welt, Markt, Farming, LLM | geplant | T09–T12 |
+| Spielkonzept, Inhaltsdefinitionen | vorhanden | docs/game-concept-v02.md, content/core |
+| Inhaltsvalidator / Python-Tests | im Repo implementiert | tools/validate_content.py; tests/content/; in diesem Aenderungslauf nicht erneut ausgefuehrt |
+| Hybrides Heightfield + Untergrund-Architektur | als ADR definiert | docs/decisions/0003-hybrid-terrain-renderer.md |
+| Material- und Pixel-Art-Renderer | **nicht implementiert** | docs/design/terrain-rendering-spike-v0.1.md |
+| Aktuelle freigegebene Referenzgrafik | Transfer offen | game/assets/style_reference/current/README.md; keine behauptete PNG-Binaerintegration |
+| Verworfene Tilesets / alte Kalibrierung | aus diesem Branch entfernt | History auf main |
+| Godot-/C#-Projekt | nicht implementiert | T01 |
+| Terrain-Editing / Wasser / Underground | geplant, nicht implementiert | ADR 0003 |
+| Weitere Simulation / Inventar / Agents | geplant | docs/project/BACKLOG.md |
 
-Testergebnisse dieses Standes: siehe VALIDATION.md. Keine Aussage über Spiel-FPS,
-Simulationsleistung, zehn überlebte Spieltage oder C#-Kompilierbarkeit vorhanden.
-
-Statusvokabular: `defined` = Daten/Vertrag vorhanden, `implemented` = Code vorhanden,
-`verified` = benanntes Abnahmeszenario bestanden. Nicht gleichsetzen.
+Statusbezeichnungen: definiert != implementiert != getestet. Ein Architekturtext ist kein Render-/Performance-Nachweis.

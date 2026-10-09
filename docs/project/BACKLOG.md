@@ -1,31 +1,31 @@
 # Backlog und Abnahme
 
-Alle Einträge offen. In Reihenfolge bearbeiten; nicht alle Inhaltsketten parallel
-implementieren. Nach jeder Stufe einen überprüfbaren Commit erzeugen.
+## Vorrangiges technisches Grafik-Risiko
 
-| ID | Aufgabe | Abhängigkeit | Fertig, wenn … |
-|---|---|---|---|
-| T01 | .NET-Solution, Core, Headless, Tests und Godot-Hülle | keine | versionierte Toolchain; Core/Headless bauen; leeres Fenster startet |
-| T02 | Contentloader und typisierte Definitionen in C# | T01 | alle vorhandenen Definitionen laden; ungültige Referenz verständlich abgewiesen |
-| T03 | Identitäten, Inventar, Eigentum, Behälter und Reservierungen | T02 | Split/Merge erhält Menge und Besitzer; keine doppelte Reservierung; Überfüllung abgewiesen |
-| T04 | Uhr, Scheduler, Rezeptjob, Werkstück und Feuer-Minimalmodell | T03 | Abkochen verbraucht echtes Wasser/Brennstoff, bindet Topf und erzeugt Ergebnis einmal; Pause/Abbruch korrekt |
-| T05 | Zwei Personen, Bedürfnisse, Wege und kleine Autonomie | T04 | Wasser/Holz/Schlaf selbstständig, keine Endlosschleifen; unterschiedliche Präferenzen erkennbar |
-| T06 | Darstellung und Inspektor | T05 | Tätigkeiten, Bestände und Blockaden sichtbar; Eingaben gehen durch Core-Regeln |
-| T07 | Save/Load und Migration v1 | T04 | Speichern mitten in aktiver/passiver Arbeit; Fortsetzen ohne Mengensprung oder verlorene Reservierung |
-| T08 | Stabiler Haushalt, soziale Hilfe und Langlauf | T05,T06,T07 | zehn Spieltage in mehreren Seeds, Wetter-/Werkzeugstörungen, eine selbst initiierte soziale Handlung |
-| T09 | Landwirtschaft mit Weizen/Flachs | T08 | Saatverbrauch, Wachstum unter Umweltbedingungen und begrenzte Ernte nachgewiesen |
-| T10 | Haushalte, Rechte, Markt und Reisen | T08 | atomarer Tausch, Verpflichtungen und echte Transportzeit |
-| T11 | Entfernte Fortschreibung und Skalierung | T10 | Mengen/Identitäten über Detailwechsel erhalten, vergleichbare Versorgung innerhalb definierter Toleranz |
-| T12 | Optionales Gesprächsmodell | T10 | ausgeschaltet voll spielbar; widersprüchlicher Vorschlag ohne Zustandsänderung abgewiesen |
+| ID | Aufgabe | Fertig, wenn ... |
+|---|---|---|
+| V00 | Vollstaendige unveraenderte Wald-Referenz-PNG in `game/assets/style_reference/current/` ablegen und SHA-256 dokumentieren | Referenz ist als echte Binaerdatei im Git-Branch vorhanden, kein Tileatlas |
+| V01 | Minimalen 16x16-m-Godot-Grafikspike aufsetzen | reproduzierbare 65x65 Vertexhoehen, orthografische Kamera, Dummy-Materialien, editierbare Grube/Huegel |
+| V02 | R1 / R2 Terrainmaterial-Verfahren und unabhängige kleine Dekor-Overlays | originale Bilddetails soweit moeglich erhalten, keine 32x32-Kachelpflicht |
+| V03 | R0/R1/R2 gegen referenzierten Bildausschnitt und A/B/C-Hoehenzustand vergleichen | Gates G1-G6 des Spike-Dokuments mit echten 1x/4x Screenshots und explizitem Go/No-Go |
 
-## Kritische fachliche Tests
+**Entscheidung:** Ohne bestandene visuelle Pruefung keine grossflaechige Wasser-/Höhlenimplementierung. Ein schoenes AI-Gesamtbild allein ist nicht ausreichend.
 
-- Zwei Akteure reservieren denselben Topf: genau einer bekommt ihn.
-- Abbruch vor Beginn: Eingaben zurück. Abbruch nach Transformation: Werkstück bleibt.
-- Laden kurz vor Abschluss: Ergebnis wird insgesamt genau einmal erstellt.
-- Regen unterbricht Trocknung; erneutes Betrachten beschleunigt sie nicht.
-- Brennstoff wird nie gleichzeitig von Rezept und Feuer doppelt abgebucht.
-- Gesalzene Haut kann eingeweicht werden, erzeugt aber kein kostenloses Leder.
-- Planer findet Material nur aus bekanntem, erlaubtem und erreichbarem Bestand.
-- Feld kann ohne Saatkohorte nicht geerntet werden; wiederholte Ernte dupliziert nichts.
-- Defekte oder fehlende Definitionen blockieren Laden mit Dateipfad/ID und Ursache.
+## Spielsimulations-Backlog (bestehende Reihenfolge, vorerst geparkt)
+
+| ID | Aufgabe |
+|---|---|
+| T01 | .NET-Solution, Core, Headless, Tests und Godot-Huelle |
+| T02 | Contentloader und typisierte Definitionen in C# |
+| T03 | Inventar, Eigentum, Reservierungen und Behaelter |
+| T04 | Uhr, Scheduler, Rezeptjob und Feuer |
+| T05 | Personen, Beduerfnisse, Navigation, kleine Autonomie |
+| T06 | Darstellung und Inspektor |
+| T07 | Save/Load und Migration |
+| T08 | Haushalt, soziale Hilfe und Langlauf |
+| T09 | Landwirtschaft |
+| T10 | Haushalte, Rechte, Markt und Reisen |
+| T11 | Entfernte Fortschreibung und Skalierung |
+| T12 | Optionales Gespraechsmodell |
+
+Detaillierte Funktionsvertraege in docs/architecture/technical-design.md und docs/architecture/process-contract.md bleiben gueltig, soweit ADR 0003 sie nicht ersetzt.

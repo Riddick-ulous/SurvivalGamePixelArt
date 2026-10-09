@@ -1,58 +1,28 @@
-# Lebendige Welt — Entwicklungsgrundlage v0.1
+# Lebendige Welt — Architektur-Experiment Heightfield / Pixel Art
 
-Stand: 2026-10-08. Eigenständig lebende Welt, Survival und soziale Simulation.
+**Branch:** `experiment/heightfield-pixelart-renderer` (Stand 2026-10-09). Eigenstaendig lebende Welt, Survival und Sozial-Simulation bleiben die Spielvision. **Hier existiert noch kein spielbares Godot-Projekt und kein nachgewiesener Rendering-Prototyp.**
 
-**Dieses Repository enthält Design, Architektur, konkrete Inhaltsdaten und einen
-ausführbaren Inhaltsprüfer. Es enthält noch kein spielbares Godot-Projekt und
-keine implementierte C#-Simulation.** Die Architektur ist ein begründeter erster
-Vorschlag; Änderungen werden über Architecture Decision Records dokumentiert.
+## Aktueller Fokus
+Nicht mehr aus fertigen Bildern 32x32-Tiles ableiten. Der Weltzustand beschreibt Hoehe, Bodenmaterial, Wasser und Objekte; die Grafik stellt diesen Zustand mit einem hybriden 2,5D-Renderer dar. Die Atmosphaere der zusammenhaengenden Pixel-Art-Waldszene ist die Art-Direction-Referenz, kein bereits verwendbarer Assetatlas.
 
-## Einstieg
+1. [Spielkonzept](docs/game-concept-v02.md)
+2. [Architekturentscheidung ADR 0003](docs/decisions/0003-hybrid-terrain-renderer.md)
+3. [Minimales Grafikexperiment und Abnahmekriterien](docs/design/terrain-rendering-spike-v0.1.md)
+4. [Referenzstatus](game/assets/style_reference/current/README.md)
+5. [Technischer Gesamtentwurf](docs/architecture/technical-design.md)
+6. [Status](docs/project/STATUS.md) / [Backlog](docs/project/BACKLOG.md)
+7. [Prozessvertrag](docs/architecture/process-contract.md) / [Contentpflege](docs/content/authoring.md)
 
-1. [Spielkonzept](docs/game-concept-v02.md): unveränderte beigefügte Grundlage.
-2. [Ergänzende Spielregeln](docs/design/game-systems.md): Abgrenzungen und offene Fragen.
-3. [Technik](docs/architecture/technical-design.md): Module, Dateien, Datenfluss.
-4. [Prozessvertrag](docs/architecture/process-contract.md): Rezepte, Aufträge, Phasen.
-5. [Inhalte bearbeiten](docs/content/authoring.md) und [Rezeptkatalog](docs/content/recipe-catalog.md).
-6. [Implementierungsstand](docs/project/STATUS.md), [Backlog](docs/project/BACKLOG.md).
-7. [Startprompt für Coding-Agenten](docs/project/IMPLEMENTATION_PROMPT.md).
-
-## Direkt ausführbar
-
-Python 3.10 oder neuer, ausschließlich Standardbibliothek:
+## Bereits ausfuehrbar
+Nur Inhaltsvalidierung und die vorhandenen Python-Unittests; keine Gameplay- oder Grafikausfuehrung:
 
 ```sh
 python3 tools/validate_content.py
 python3 -m unittest discover -s tests/content -v
-git log --oneline
 ```
 
-Unter Windows kann `py -3` statt `python3` verwendet werden. Die beiden Prüfungen
-testen Inhaltsstruktur und Referenzen; sie führen keine Spielsimulation aus.
-Keine Engineinstallation ist für die Durchsicht dieses Standes erforderlich.
+## Bewusst nicht im Branch
+Fruehere Tile-Extraktionen, Sprite-Kalibrierungen und Produktionsplaene, die ein Atlas-System als Architekturgrundlage voraussetzen. Die Originalhistorie bleibt auf `main` erhalten. Die bereits im Chat vorhandene freigegebene vollstaendige Landschafts-PNG wurde noch **nicht** binaer nach GitHub uebertragen; vor einer formalen visuellen Abnahme nachholen. Neue Photoshop-/KI-Bilder gelten nicht als Renderbeweise.
 
-## Repository und Übergabe
-
-Das ZIP enthält das lokale Git-Repository einschließlich `.git` und erstem Commit.
-Nach dem Entpacken im Ordner `lebendige-welt` arbeiten. Es gibt noch keinen Remote.
-Für einen eigenen leeren Git-Server/GitHub/Gitea-Remote:
-
-```sh
-git remote add origin <URL-DES-EIGENEN-REPOSITORIES>
-git push -u origin main
-```
-
-Kein Hostinganbieter ist Teil der Architektur. Ein späterer privater Remote kann
-frei gewählt werden. Es wurde keine Open-Source-Lizenz festgelegt; Veröffentlichung
-und Lizenzierung bleiben eine separate Entscheidung.
-
-## Umfang
-
-`content/core` enthält Item-, Rezept-, Wissens-, Arbeitsplatz-, Umwelt-, Workflow-
-und Kulturpflanzendefinitionen. Die genaue Zahl wird vom Validator ausgegeben.
-Rezepte liegen **einzeln** in thematischen Unterordnern. Arbeitsabläufe verwenden
-explizit registrierte Operationen; deren Laufzeitimplementierung ist offen.
-
-Simulation und Darstellung sollen später in `src/` und `game/` entstehen. Die dort
-vorhandenen README-Dateien beschreiben die Zuständigkeit und sind keine Stubs mit
-vorgetäuschter Spielfunktionalität.
+## Lizenz
+Keine Open-Source-Lizenz festgelegt; eine oeffentliche Repo-Sichtbarkeit begruendet keine freie Wiederverwendung.

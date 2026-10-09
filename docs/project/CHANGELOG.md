@@ -1,14 +1,11 @@
 # Changelog
 
-## Grafikdesign-Prototyp 01 — 2026-10-09
-- Neun Original-PNGs (2 Personen, Gras/Waldboden, Wasser, Ufer, Feuer, 2 Bäume) versioniert.
-- Grafikkonzept-Manifest mit Originalabmessungen und offenen Integrationsschritten ergänzt.
-- Binärintegrität anhand Git-Blob-SHA geprüft. Keine Engine-Integration oder Gameplay-Abnahme.
+## Heightfield-Pixelart-Architektur-Experiment — 2026-10-09
+- Neuer isolierter Branch auf Basis des aktuellen `main`.
+- Alte Tile-Assetstudien und darauf zugeschnittene Grafik-Produktionsunterlagen aus diesem Branch geloescht (auf `main` weiterhin vorhanden).
+- Architekturentscheidung ADR 0003: hybride editierbare Oberflaeche, Untergrund-Portale, Wasser getrennt, orthografischer Pixel-Art-Renderer.
+- Minimalen visuellen Vergleichs-Spike spezifiziert, inklusive no-go bei Verfehlung der Referenzaesthetik.
+- Fehlende binaere Master-Referenz ausdruecklich dokumentiert. Kein GPU-Rendering oder Bildvergleich als bereits ausgefuehrt behauptet.
 
-## 0.1.0 — 2026-10-08
-- Beigefügtes Spielkonzept unverändert übernommen.
-- Architektur, Prozessvertrag, Inhaltspflege und Entwicklungsreihenfolge ausgearbeitet.
-- Erster größerer Datenbestand für Handwerk, Ernährung, Textilien, Leder und Metall.
-- Arbeitsvorlagen und zwei Kulturpflanzen als explizit unimplementierte Entwürfe.
-- Schemata, unabhängiger Inhaltsprüfer und Regressionstests ergänzt.
-- Lokales Git-Repository für Übergabe vorbereitet; noch kein Remote und kein Spiel.
+## Historische Arbeiten
+Die neun Original-PNGs des Grafikdesign-Prototyps 01 und die Tile-Kalibrierung bleiben im Git-Verlauf von `main` nachvollziehbar. Das eigentliche Spiel und die Simulation sind noch nicht implementiert.
