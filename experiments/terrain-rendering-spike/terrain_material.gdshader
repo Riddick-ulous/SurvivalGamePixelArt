@@ -12,6 +12,7 @@ uniform float material_meters = 8.0;
 
 varying vec3 world_pos;
 varying float grass;
+varying float cut_depth;
 
 float hash21(vec2 p) {
     return fract(sin(dot(p, vec2(127.1, 311.7)) + seed) * 43758.5453123);
@@ -26,6 +27,7 @@ float noise2(vec2 p) {
 void vertex() {
     world_pos = (MODEL_MATRIX * vec4(VERTEX, 1.0)).xyz;
     grass = COLOR.r;
+    cut_depth = COLOR.g;
 }
 void fragment() {
     vec2 p = world_pos.xz;
@@ -41,6 +43,55 @@ void fragment() {
         vec3 turf = mix(vec3(0.16,0.29,0.12),vec3(0.46,0.55,0.24),0.6*large+0.4*medium);
         float blend = smoothstep(0.26,0.74,g+0.14*(medium-0.5));
         ALBEDO = mix(earth,turf,blend)*(0.90+0.20*fine);
+    } else if (render_mode_id == 6) {
+        // R6: R5's exact stochastic grass A/B selection, unchanged.
+        vec2 uv = fract(p / material_meters);
+        vec3 turf_a = texture(grass_a_tex,uv).rgb;
+        vec3 turf_b = texture(grass_b_tex,uv).rgb;
+        float grass_field = 0.64*noise2(p*1.55+vec2(13.7,8.2))
+                          + 0.36*noise2(p*4.0+vec2(71.1,19.4));
+        float grass_jitter = hash21(floor(p*8.0+vec2(2.0,7.0))) - 0.5;
+        float grass_pick = step(0.50,grass_field+0.14*grass_jitter);
+        vec3 turf = mix(turf_a,turf_b,grass_pick);
+
+        // Reconstruct broad-scale path boundaries analytically in world-space:
+        // width and center vary independently over 0.5-2m spatial scales.
+        // Do not reuse the near-straight per-vertex R5 material weight.
+        float center = 6.1 + 0.85*sin(p.x*0.42);
+        center += 0.40*(noise2(vec2(p.x*0.55,11.0))-0.5)*2.0;
+        center += 0.20*(noise2(p*0.85+vec2(6.0,17.0))-0.5)*2.0;
+        float half_width = 0.62 + 0.24*(noise2(p*0.75+vec2(34.0,12.0))-0.5)*2.0;
+        float distance_to_path = abs(p.y-center);
+        float edge_field = distance_to_path-half_width;
+        float islands = 0.21*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0
+                      + 0.08*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
+        float pixel_jitter = (hash21(floor(p*32.0+vec2(97.0,31.0)))-0.5)*0.065;
+        float grass_coverage = step(0.0,edge_field+islands+pixel_jitter);
+
+        // Exposed subsurface: no grass inside the excavated floor or bank.
+        // Depth is encoded in vertex color.g by the terrain geometry builder.
+        float exposed = step(0.13,cut_depth);
+        grass_coverage *= 1.0-exposed;
+
+        // Slope-aware projection: the original XZ mapping stretches across
+        // banks. Blend in a side-projected soil sample only on steep surfaces.
+        // World derivatives avoid reliance on a possibly flipped face normal.
+        vec3 dpdx = dFdx(world_pos);
+        vec3 dpdy = dFdy(world_pos);
+        vec3 geometric_normal = normalize(cross(dpdx,dpdy));
+        float up = abs(geometric_normal.y);
+        float bank = 1.0-smoothstep(0.68,0.94,up);
+        vec2 side_uv_x = fract(world_pos.zy / material_meters);
+        vec2 side_uv_z = fract(world_pos.xy / material_meters);
+        vec3 side_x = texture(soil_tex,side_uv_x).rgb;
+        vec3 side_z = texture(soil_tex,side_uv_z).rgb;
+        float side_mix = abs(geometric_normal.x)/
+                         max(0.001,abs(geometric_normal.x)+abs(geometric_normal.z));
+        vec3 earth = mix(texture(soil_tex,uv).rgb,mix(side_z,side_x,side_mix),bank);
+
+        // Gentle geometry-based lightness, without filtering source pixels.
+        float shade = mix(0.77,1.0,up);
+        ALBEDO = mix(earth,turf,grass_coverage)*shade;
     } else if (render_mode_id == 5) {
         // R5: world-anchored stochastic material selection.
         // No RGB interpolation between different texture materials.

@@ -4,7 +4,7 @@ const GRID := 64
 const EXTENT := 16.0
 const STEP := EXTENT / GRID
 const SEED := 1909
-const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions"]
+const MODES := ["R0 debug", "R1 continuous material", "R2 pixel clusters", "R3 structured assets", "R4 image materials", "R5 stochastic transitions", "R6 excavated terrain"]
 const CASES := ["A natural", "B excavation", "C mound"]
 var mode_id := 0
 var case_id := 0
@@ -18,6 +18,7 @@ var r3_atlas: Texture2D
 var r3_overlay: Texture2D
 var r4_ready: bool = false
 var close_camera: bool = false
+var r6_debug: bool = false
 
 func _ready() -> void:
     RenderingServer.set_default_clear_color(Color(0.13, 0.17, 0.18))
@@ -47,7 +48,11 @@ func _height(x: float,z: float) -> float:
     var h: float = 0.12*sin(x*0.7+0.2)*cos(z*0.6) + 0.07*sin(x*1.8+z*0.9)
     var d: float = Vector2(x-8.2,z-8.0).length()
     if case_id == 1:
-        h -= 0.72*(1.0-smoothstep(1.0,2.25,d))
+        if mode_id == 6:
+            # Flatter excavated floor with steeper but resolvable banks.
+            h -= 1.05*(1.0-smoothstep(1.25,2.20,d))
+        else:
+            h -= 0.72*(1.0-smoothstep(1.0,2.25,d))
     elif case_id == 2:
         h += 1.10*(1.0-smoothstep(0.5,3.2,d))
     return h
@@ -74,7 +79,10 @@ func _rebuild_mesh() -> void:
             var px := float(x)*STEP
             var pz := float(z)*STEP
             verts.append(Vector3(px,_height(px,pz),pz))
-            colors.append(Color(_grass(px,pz),0,0,1))
+            var cut_depth: float = 0.0
+            if mode_id == 6 and case_id == 1:
+                cut_depth = 1.05*(1.0-smoothstep(1.25,2.20,Vector2(px-8.2,pz-8.0).length()))
+            colors.append(Color(_grass(px,pz),cut_depth,0,1))
     for z in range(GRID):
         for x in range(GRID):
             var a := z*(GRID+1)+x
@@ -129,21 +137,21 @@ func _build_ui() -> void:
     ui.add_child(info)
 
 func _update_scene() -> void:
+    if mode_id >= 4 and not r4_ready:
+        mode_id = 3
+        push_warning("Image materials missing in res://materials/")
     _rebuild_mesh()
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
     terrain_material.set_shader_parameter("world_scale",32.0)
     terrain_material.set_shader_parameter("seed",float(SEED))
     terrain_material.set_shader_parameter("r3_atlas",r3_atlas)
-    if mode_id >= 4 and not r4_ready:
-        mode_id = 3
-        push_warning("R4 PNGs missing. Copy grass_a_256.png, grass_b_256.png, soil_256.png to res://materials/")
     decor_root.visible = mode_id == 3
     for item in decor_root.get_children():
         var x: float = item.get_meta("ground_x")
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
-    info.text = "%s | %s | pitch %.0f° | %s\n1-6: R0-R5   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: toggle zoom   S: screenshot\nR4/R5 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
+    info.text = "%s | %s | pitch %.0f° | %s\n1-7: R0-R6   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: toggle zoom   S: screenshot\nR4-R6 use real image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
@@ -155,6 +163,7 @@ func _unhandled_key_input(event: InputEvent) -> void:
         KEY_4: mode_id = 3
         KEY_5: mode_id = 4
         KEY_6: mode_id = 5
+        KEY_7: mode_id = 6
         KEY_Z: close_camera = not close_camera
         KEY_A: case_id = 0
         KEY_B: case_id = 1
