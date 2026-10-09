@@ -225,8 +225,9 @@ func _build_ui() -> void:
 
 func _update_scene() -> void:
     if mode_id >= 4 and not r4_ready:
-        mode_id = 3
-        push_warning("Image materials missing in res://materials/")
+        push_error("Selected %s but image textures are unavailable. Check res://materials/grass_a_256.png, grass_b_256.png, soil_256.png" % MODES[mode_id])
+        # Keep requested mode selected so the UI exposes the actual failure.
+        # Missing samplers will not display correctly until the files are loaded.
     _rebuild_mesh()
     terrain_material.set_shader_parameter("render_mode_id",mode_id)
     r71_sun.visible = mode_id >= 7
@@ -245,7 +246,8 @@ func _update_scene() -> void:
         var z: float = item.get_meta("ground_z")
         item.position.y = _height(x,z)+0.17
     var zoom_label: String = "close (~4m)" if close_camera else "wide (16m)"
-    info.text = "%s | %s | pitch %.0f° | %s\n1-0: R0-R7.2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7+: L debug H shadows J sun K reference T/Y sun -/+ G/U ambient -/+\nSun %.2f  Ambient %.2f   R4-R7 use image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label,sun_energy,ambient_energy]
+    var texture_status: String = "textures OK" if r4_ready else "MISSING PNG TEXTURES (see Output)"
+    info.text = "%s | %s | pitch %.0f° | %s | %s\n1-0: R0-R7.2   A/B/C: natural/dig/mound\nQ/W/E: pitch 35/45/55   Z: zoom   S: screenshot\nR7+: L debug H shadows J sun K reference T/Y sun -/+ G/U ambient -/+\nSun %.2f  Ambient %.2f   R4-R7 use image materials" % [MODES[mode_id],CASES[case_id],pitch,zoom_label,texture_status,sun_energy,ambient_energy]
 
 func _unhandled_key_input(event: InputEvent) -> void:
     if not (event is InputEventKey) or not event.pressed or event.echo:
