@@ -62,8 +62,18 @@ void fragment() {
         signed_edge += 0.15*(noise2(p*2.2+vec2(7.0,3.0))-0.5)*2.0;
         signed_edge += 0.05*(noise2(p*7.0+vec2(4.0,23.0))-0.5)*2.0;
         signed_edge += 0.035*(hash21(floor(p*32.0))-0.5);
-        float turf_coverage = step(0.0,signed_edge)*(1.0-step(0.11,cut_depth));
-        float lip = turf_coverage*(1.0-step(0.13,signed_edge));
+        // Explicit world-space path-edge material zones.
+        // Signed distance: negative = compacted path, positive = grass.
+        // A narrow exposed-earth strip precedes the darker turf root edge.
+        float exposed = step(0.11,cut_depth);
+        float turf_coverage = step(0.0,signed_edge)*(1.0-exposed);
+        float rim_soil = (1.0-step(0.0,signed_edge))*step(-0.115,signed_edge);
+        float root_edge = turf_coverage*(1.0-step(0.105,signed_edge));
+        // Sparse coarse clumps grow across the edge, but only locally.
+        float clump_noise = noise2(p*5.5+vec2(24.0,41.0));
+        float tuft = step(0.67,clump_noise)*step(-0.085,signed_edge)* (1.0-step(0.05,signed_edge))*(1.0-exposed);
+        // Individual dark soil interruptions within the turf root strip.
+        float broken_edge = step(0.71,noise2(p*13.0+vec2(5.0,13.0)))*root_edge;
         // Geometry normals from the mesh (view-space NORMAL) are transformed
         // to world-space, avoiding screen-derivative sign ambiguity.
         vec3 normal_world = normalize((INV_VIEW_MATRIX*vec4(NORMAL,0.0)).xyz);
@@ -74,8 +84,13 @@ void fragment() {
         if (weights.y < max(weights.x,weights.z)) {
             earth = weights.x > weights.z ? side_x : side_z;
         }
+        vec3 path_rim = earth*vec3(0.72,0.77,0.68);
+        vec3 root_turf = turf*vec3(0.57,0.68,0.47);
         ALBEDO = mix(earth,turf,turf_coverage);
-        ALBEDO = mix(ALBEDO,turf*vec3(0.63,0.76,0.53),lip*0.65);
+        ALBEDO = mix(ALBEDO,path_rim,rim_soil*0.75);
+        ALBEDO = mix(ALBEDO,root_turf,root_edge*0.85);
+        ALBEDO = mix(ALBEDO,earth*vec3(0.80,0.85,0.72),broken_edge*0.80);
+        ALBEDO = mix(ALBEDO,turf*vec3(0.85,0.97,0.70),tuft*0.72);
         ROUGHNESS = 1.0;
         if (r71_debug_mode == 1) {
             // Unlit material diagnostic, independent of all light sources.
